@@ -58,11 +58,10 @@
             border-radius: 5px;
             font-size: 18px;
             cursor: pointer;
-            margin: 10px 5px;
-            display: inline-block;
-        }
-        .test-btn {
-            background: #e74c3c;
+            margin: 10px auto;
+            display: block;
+            width: 80%;
+            max-width: 300px;
         }
         .btn:hover {
             opacity: 0.8;
@@ -107,9 +106,21 @@
             <label for="company">Company/Agency</label>
             <select id="company" required>
                 <option value="">Select your company...</option>
-                <option value="Avid Collective">Avid Collective</option>
+                <option value="Carat">Carat</option>
+                <option value="Dentsu">Dentsu</option>
+                <option value="Essence Mediacom">Essence Mediacom</option>
+                <option value="Flow">Flow</option>
                 <option value="Havas">Havas</option>
                 <option value="Initiative">Initiative</option>
+                <option value="Kaimera">Kaimera</option>
+                <option value="Mindshare">Mindshare</option>
+                <option value="Nunn">Nunn</option>
+                <option value="OMD">OMD</option>
+                <option value="PHD">PHD</option>
+                <option value="Spark Foundry">Spark Foundry</option>
+                <option value="Starcom">Starcom</option>
+                <option value="Universal McCann">Universal McCann</option>
+                <option value="Wavemaker">Wavemaker</option>
             </select>
         </div>
         
@@ -119,10 +130,7 @@
         </div>
         
         <div style="text-align: center;">
-            <button class="btn" onclick="submitRealData()">SCRATCH NOW</button>
-            <br>
-            <button class="btn test-btn" onclick="submitTestData()">TEST WEBHOOK</button>
-            <p style="font-size: 14px; color: #666;">Click TEST WEBHOOK first to verify connection</p>
+            <button class="btn" onclick="submitEntry()">SCRATCH NOW</button>
         </div>
         
         <div id="resultArea"></div>
@@ -135,69 +143,34 @@
             resultDiv.innerHTML = `<div class="${cssClass}">${message}</div>`;
         }
 
-        function submitTestData() {
-            console.log('Submitting test data via form...');
-            
-            showResult('Sending test data... This will open a new window/tab.');
-            
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/';
-            form.target = '_blank';
-            form.style.display = 'none';
-            
-            const fields = {
-                'first_name': 'TestUser',
-                'last_name': 'WebhookTest', 
-                'email': 'test@webhook.com',
-                'company': 'Avid Collective',
-                'timestamp': new Date().toISOString(),
-                'has_scratched': 'false',
-                'prize': 'Test data from live website'
-            };
-            
-            for (const [key, value] of Object.entries(fields)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            }
-            
-            document.body.appendChild(form);
-            form.submit();
-            
-            setTimeout(() => {
-                document.body.removeChild(form);
-                showResult(`
-                    Test data submitted!<br>
-                    Go to Zapier and click "Test trigger" to see the data<br>
-                    Look for: first_name: "TestUser"
-                `);
-            }, 1500);
-        }
-
-        function submitRealData() {
+        function submitEntry() {
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
             const email = document.getElementById('email').value.trim();
             const company = document.getElementById('company').value;
             const terms = document.getElementById('terms').checked;
             
+            // Validate all fields
             if (!firstName || !lastName || !email || !company || !terms) {
                 showResult('Please fill in all fields and accept terms!', true);
                 return;
             }
             
-            console.log('Submitting real form data...');
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showResult('Please enter a valid email address!', true);
+                return;
+            }
+            
+            console.log('Submitting entry for:', firstName, lastName, company);
             
             showResult(`
-                Submitting your entry...<br>
-                Name: <strong>${firstName} ${lastName}</strong><br>
-                Company: <strong>${company}</strong><br>
-                Email: <strong>${email}</strong>
+                Processing your entry...<br>
+                Please wait while we register your details...
             `);
             
+            // Create form for submission
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = 'https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/';
@@ -211,9 +184,10 @@
                 'company': company,
                 'timestamp': new Date().toISOString(),
                 'has_scratched': 'false',
-                'prize': 'Entry submitted - not scratched yet'
+                'prize': 'Not yet scratched'
             };
             
+            // Add fields to form
             for (const [key, value] of Object.entries(fields)) {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -225,17 +199,40 @@
             document.body.appendChild(form);
             form.submit();
             
+            // Clean up and show success message
             setTimeout(() => {
                 document.body.removeChild(form);
                 showResult(`
-                    Entry submitted successfully!<br>
-                    Your information has been sent to Google Sheets via Zapier.<br>
-                    Check your spreadsheet for the new row!
+                    <strong>✓ Entry submitted successfully!</strong><br><br>
+                    Thank you, ${firstName}!<br>
+                    Your scratch card is being prepared...<br><br>
+                    <em>Check your email for next steps!</em>
                 `);
+                
+                // Clear form after successful submission
+                setTimeout(() => {
+                    document.getElementById('firstName').value = '';
+                    document.getElementById('lastName').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('company').value = '';
+                    document.getElementById('terms').checked = false;
+                }, 3000);
             }, 1500);
         }
         
-        console.log('Avid Scratch & Win loaded - ready for live testing');
+        // Add enter key support for form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        submitEntry();
+                    }
+                });
+            });
+        });
+        
+        console.log('Avid Scratch & Win - Production Version Loaded');
     </script>
 </body>
 </html>
