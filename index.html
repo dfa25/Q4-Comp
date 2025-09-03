@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Avid Collective - Scratch & Win</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #7dd3fc 0%, #a855f7 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px dashed #666;
+        }
+        .logo h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .checkbox-group input {
+            width: auto;
+        }
+        .btn {
+            background: #333;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px 5px;
+            display: inline-block;
+        }
+        .test-btn {
+            background: #e74c3c;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        .error-box {
+            border-left: 4px solid #dc3545;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>Avid Scratch & Win</h1>
+        </div>
+        
+        <p style="text-align: center; margin-bottom: 30px;">Enter your details below for your chance to scratch and win!</p>
+        
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="company">Company/Agency</label>
+            <select id="company" required>
+                <option value="">Select your company...</option>
+                <option value="Avid Collective">Avid Collective</option>
+                <option value="Havas">Havas</option>
+                <option value="Initiative">Initiative</option>
+            </select>
+        </div>
+        
+        <div class="checkbox-group">
+            <input type="checkbox" id="terms" required>
+            <label for="terms">I agree to receive updates and agree to terms</label>
+        </div>
+        
+        <div style="text-align: center;">
+            <button class="btn" onclick="submitRealData()">SCRATCH NOW</button>
+            <br>
+            <button class="btn test-btn" onclick="submitTestData()">TEST WEBHOOK</button>
+            <p style="font-size: 14px; color: #666;">Click TEST WEBHOOK first to verify connection</p>
+        </div>
+        
+        <div id="resultArea"></div>
+    </div>
+
+    <script>
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('resultArea');
+            const cssClass = isError ? 'error-box' : 'result-box';
+            resultDiv.innerHTML = `<div class="${cssClass}">${message}</div>`;
+        }
+
+        function submitTestData() {
+            console.log('Submitting test data via form...');
+            
+            showResult('Sending test data... This will open a new window/tab.');
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/';
+            form.target = '_blank';
+            form.style.display = 'none';
+            
+            const fields = {
+                'first_name': 'TestUser',
+                'last_name': 'WebhookTest', 
+                'email': 'test@webhook.com',
+                'company': 'Avid Collective',
+                'timestamp': new Date().toISOString(),
+                'has_scratched': 'false',
+                'prize': 'Test data from live website'
+            };
+            
+            for (const [key, value] of Object.entries(fields)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            
+            setTimeout(() => {
+                document.body.removeChild(form);
+                showResult(`
+                    Test data submitted!<br>
+                    Go to Zapier and click "Test trigger" to see the data<br>
+                    Look for: first_name: "TestUser"
+                `);
+            }, 1500);
+        }
+
+        function submitRealData() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const company = document.getElementById('company').value;
+            const terms = document.getElementById('terms').checked;
+            
+            if (!firstName || !lastName || !email || !company || !terms) {
+                showResult('Please fill in all fields and accept terms!', true);
+                return;
+            }
+            
+            console.log('Submitting real form data...');
+            
+            showResult(`
+                Submitting your entry...<br>
+                Name: <strong>${firstName} ${lastName}</strong><br>
+                Company: <strong>${company}</strong><br>
+                Email: <strong>${email}</strong>
+            `);
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/';
+            form.target = '_blank';
+            form.style.display = 'none';
+            
+            const fields = {
+                'first_name': firstName,
+                'last_name': lastName,
+                'email': email,
+                'company': company,
+                'timestamp': new Date().toISOString(),
+                'has_scratched': 'false',
+                'prize': 'Entry submitted - not scratched yet'
+            };
+            
+            for (const [key, value] of Object.entries(fields)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            
+            setTimeout(() => {
+                document.body.removeChild(form);
+                showResult(`
+                    Entry submitted successfully!<br>
+                    Your information has been sent to Google Sheets via Zapier.<br>
+                    Check your spreadsheet for the new row!
+                `);
+            }, 1500);
+        }
+        
+        console.log('Avid Scratch & Win loaded - ready for live testing');
+    </script>
+</body>
+</html>
