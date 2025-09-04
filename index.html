@@ -669,22 +669,32 @@
         }
         
         function sendFinalResult(prize) {
-            // Send final result to webhook
+            console.log('Sending final result to webhook');
+            
+            const finalData = {
+                first_name: currentUser.firstName,
+                last_name: currentUser.lastName,
+                email: currentUser.email,
+                company: currentUser.company,
+                timestamp: new Date().toISOString(),
+                has_scratched: true,
+                prize: prize.isWinner ? prize.type : 'no_prize',
+                entry_number: entryNumber
+            };
+            
+            // Send final result to webhook with proper JSON
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    first_name: currentUser.firstName,
-                    last_name: currentUser.lastName,
-                    email: currentUser.email,
-                    company: currentUser.company,
-                    timestamp: new Date().toISOString(),
-                    has_scratched: 'true',
-                    prize: prize.isWinner ? prize.type : 'no_prize',
-                    entry_number: entryNumber
-                })
-            }).catch(err => {
-                console.log('Final result sent');
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(finalData)
+            })
+            .then(response => {
+                console.log('Final result sent successfully');
+            })
+            .catch(err => {
+                console.log('Final result sent (CORS response expected)');
             });
         }
         
@@ -703,7 +713,7 @@
                 
                 if (prize.type === 'voucher') {
                     resultMessage.innerHTML = `
-                        <h3>You won a $100 Campaign Voucher!</h3>
+                        <h3>You won a $150 ${prize.voucherType} Voucher!</h3>
                         <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
                         <p>Screenshot this page as proof of your win!</p>
                         <p><strong>Entry #${entryNumber}</strong></p>
@@ -711,9 +721,10 @@
                     `;
                 } else {
                     resultMessage.innerHTML = `
-                        <h3>You won a 20% Campaign Discount!</h3>
+                        <h3>You won 20% OFF your next campaign + Free BLS!*</h3>
                         <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
-                        <p>Get 20% off your next campaign!</p>
+                        <p>Get 20% off + Free Brand Lift Study on your next campaign!</p>
+                        <p style="font-size: 12px; color: #666;">*Campaign must be $65,000+ • BLS requires 6-week runtime & 20,000 minimum article views</p>
                         <p>Screenshot this page as proof of your win!</p>
                         <p><strong>Entry #${entryNumber}</strong></p>
                         <p style="margin-top: 20px; color: #666;">An Avid representative will contact you at ${currentUser.email} within 48 hours.</p>
