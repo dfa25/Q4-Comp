@@ -1,544 +1,738 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avid Collective - Scratch & Win</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #7dd3fc 0%, #a855f7 100%);
+        * {
             margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            border: 2px dashed #666;
-        }
-        .logo h1 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        /* Form Section */
-        #formSection {
-            display: block;
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #7dd3fc 0%, #a855f7 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
+        
+        /* Background icons */
+        .bg-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .bg-icon {
+            position: absolute;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+        
+        .logo .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 20px solid #10b981;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+        
+        .main-content {
+            background: white;
+            border: 2px dashed #666;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .entry-section h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .entry-section p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
         .form-group {
-            margin-bottom: 15px;
+            text-align: left;
         }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
         label {
             display: block;
-            font-weight: bold;
             margin-bottom: 5px;
+            font-weight: bold;
             text-transform: uppercase;
+            font-size: 0.9rem;
         }
-        input, select {
+        
+        input[type="text"], input[type="email"], select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box;
+            font-size: 1rem;
         }
+        
+        select {
+            background: white;
+            cursor: pointer;
+        }
+        
         .checkbox-group {
             display: flex;
             align-items: center;
             gap: 10px;
             margin: 20px 0;
-        }
-        .checkbox-group input {
-            width: auto;
-        }
-        .btn {
-            background: #333;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            margin: 10px auto;
-            display: block;
-            width: 80%;
-            max-width: 300px;
-        }
-        .btn:hover {
-            opacity: 0.8;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            text-align: left;
         }
         
-        /* Scratch Card Section */
-        #scratchSection {
-            display: none;
-            text-align: center;
+        .enter-btn, .submit-btn {
+            background: #333;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-        .scratch-container {
+        
+        .enter-btn:hover, .submit-btn:hover {
+            background: #555;
+        }
+        
+        .scratch-section {
+            background: white;
+            border: 2px dashed #666;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .scratch-card {
             position: relative;
-            width: 400px;
-            height: 250px;
+            width: 300px;
+            height: 200px;
             margin: 20px auto;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: grab;
+            border: 2px solid #ccc;
         }
-        #scratchCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            cursor: crosshair;
-            z-index: 2;
+        
+        .scratch-card:active {
+            cursor: grabbing;
         }
+        
         .prize-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: linear-gradient(45deg, #f0f0f0 0%, #e0e0e0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            font-size: 24px;
+            font-size: 1.2rem;
             font-weight: bold;
             color: #333;
             z-index: 1;
-        }
-        .scratch-info {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 5px;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #ddd;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #8BC34A);
-            width: 0%;
-            transition: width 0.3s ease;
+            text-align: center;
+            padding: 20px;
         }
         
-        /* Results Section */
-        #resultSection {
-            display: none;
-            text-align: center;
-            padding: 30px;
+        .scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
         }
-        .prize-announcement {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            margin: 20px 0;
-        }
-        .prize-details {
-            padding: 20px;
-            background: #f8f9fa;
+        
+        .result-section {
+            background: white;
+            border: 2px dashed #666;
             border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .winner {
+            color: #10b981;
+        }
+        
+        .loser {
+            color: #ef4444;
+        }
+        
+        .rules-section {
+            background: #000;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .rules-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .rules-link {
+            color: #666;
+            text-decoration: underline;
+        }
+        
+        .prizes-list {
             margin: 20px 0;
+            line-height: 1.8;
+            font-size: 0.9rem;
+            color: #666;
         }
-        .error-box {
-            border-left: 4px solid #dc3545;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
+        
+        .scratch-progress {
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #666;
         }
-        .success-box {
-            border-left: 4px solid #28a745;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
+        
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .scratch-card {
+                width: 250px;
+                height: 160px;
+            }
+            
+            .main-content, .scratch-section {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Background Icons -->
+    <div class="bg-icons">
+        <div class="bg-icon" style="top: 10%; left: 5%;">👤</div>
+        <div class="bg-icon" style="top: 20%; right: 10%;">💎</div>
+        <div class="bg-icon" style="top: 40%; left: 8%;">📞</div>
+        <div class="bg-icon" style="top: 50%; right: 15%;">🌐</div>
+        <div class="bg-icon" style="top: 60%; left: 12%;">📧</div>
+        <div class="bg-icon" style="top: 70%; right: 8%;">🔍</div>
+        <div class="bg-icon" style="top: 80%; left: 15%;">🎵</div>
+        <div class="bg-icon" style="top: 30%; left: 20%;">📱</div>
+        <div class="bg-icon" style="top: 15%; right: 25%;">📷</div>
+        <div class="bg-icon" style="top: 75%; right: 20%;">💬</div>
+        <div class="bg-icon" style="bottom: 10%; left: 25%;">📋</div>
+    </div>
+    
     <div class="container">
-        <div class="logo">
-            <h1>Avid Scratch & Win</h1>
+        <!-- Header with Logo -->
+        <div class="header">
+            <div class="logo">
+                <h1>Avid</h1>
+                <div class="play-icon"></div>
+            </div>
         </div>
         
-        <!-- Form Section -->
-        <div id="formSection">
-            <p style="text-align: center; margin-bottom: 30px;">Enter your details below for your chance to scratch and win!</p>
-            
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" required>
+        <!-- Entry Section -->
+        <div class="main-content" id="entrySection">
+            <div class="entry-section">
+                <h2>Scratch & Win</h2>
+                <p>Enter your details below for your chance to scratch and win!</p>
+                
+                <!-- Entry Form with ALL Required Fields -->
+                <div style="margin: 20px 0;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">FIRST NAME</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">LAST NAME</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="email">EMAIL</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="company">COMPANY/AGENCY</label>
+                            <select id="company" name="company" required>
+                                <option value="">Select your company...</option>
+                                <option value="Carat">Carat</option>
+                                <option value="Dentsu">Dentsu</option>
+                                <option value="Essence Mediacom">Essence Mediacom</option>
+                                <option value="Flow">Flow</option>
+                                <option value="Havas">Havas</option>
+                                <option value="Initiative">Initiative</option>
+                                <option value="Kaimera">Kaimera</option>
+                                <option value="Mindshare">Mindshare</option>
+                                <option value="Nunn">Nunn</option>
+                                <option value="OMD">OMD</option>
+                                <option value="PHD">PHD</option>
+                                <option value="Spark Foundry">Spark Foundry</option>
+                                <option value="Starcom">Starcom</option>
+                                <option value="Universal McCann">Universal McCann</option>
+                                <option value="Wavemaker">Wavemaker</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to receive updates and agree to terms</label>
+                    </div>
+                    <button type="button" class="enter-btn" onclick="startGame()">CONTINUE TO SCRATCH CARD</button>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="company">Company/Agency</label>
-                <select id="company" required>
-                    <option value="">Select your company...</option>
-                    <option value="Carat">Carat</option>
-                    <option value="Dentsu">Dentsu</option>
-                    <option value="Essence Mediacom">Essence Mediacom</option>
-                    <option value="Flow">Flow</option>
-                    <option value="Havas">Havas</option>
-                    <option value="Initiative">Initiative</option>
-                    <option value="Kaimera">Kaimera</option>
-                    <option value="Mindshare">Mindshare</option>
-                    <option value="Nunn">Nunn</option>
-                    <option value="OMD">OMD</option>
-                    <option value="PHD">PHD</option>
-                    <option value="Spark Foundry">Spark Foundry</option>
-                    <option value="Starcom">Starcom</option>
-                    <option value="Universal McCann">Universal McCann</option>
-                    <option value="Wavemaker">Wavemaker</option>
-                </select>
-            </div>
-            
-            <div class="checkbox-group">
-                <input type="checkbox" id="terms" required>
-                <label for="terms">I agree to receive updates and agree to terms</label>
-            </div>
-            
-            <div style="text-align: center;">
-                <button class="btn" id="submitBtn" onclick="submitEntry()">CONTINUE TO SCRATCH CARD</button>
-            </div>
-            
-            <div id="formError"></div>
         </div>
         
-        <!-- Scratch Card Game Section -->
-        <div id="scratchSection">
-            <p style="font-size: 20px; margin-bottom: 20px;">Scratch to reveal your prize!</p>
+        <!-- Scratch Section -->
+        <div class="scratch-section" id="scratchSection">
+            <h2>Scratch to Find Out if You Won!</h2>
+            <p>Use your mouse or finger to scratch off the silver area and discover your result</p>
             
-            <div class="scratch-container">
-                <div class="prize-layer" id="prizeLayer">
-                    <!-- Prize will be set dynamically -->
-                </div>
-                <canvas id="scratchCanvas" width="400" height="250"></canvas>
+            <div class="prizes-list">
+                <p><strong>Possible Prizes:</strong></p>
+                <p>$100 Campaign Voucher • 20% Campaign Discount</p>
             </div>
             
-            <div class="scratch-info">
-                <p><strong>Use your mouse or finger to scratch the card!</strong></p>
-                <p>Scratch at least 50% to reveal your prize</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <p id="scratchPercent">0% Scratched</p>
+            <div class="scratch-card">
+                <div class="prize-layer" id="prizeLayer">Loading your result...</div>
+                <canvas class="scratch-canvas" id="scratchCanvas" width="300" height="200"></canvas>
             </div>
+            
+            <div class="scratch-progress" id="scratchProgress">Scratch off at least 50% to reveal your result</div>
+            <div class="scratch-progress" id="percentageDisplay" style="font-weight: bold; color: #333;">0% scratched</div>
         </div>
         
         <!-- Result Section -->
-        <div id="resultSection">
-            <div class="prize-announcement" id="prizeAnnouncement"></div>
-            <div class="prize-details" id="prizeDetails"></div>
-            <button class="btn" onclick="resetGame()">PLAY AGAIN</button>
+        <div class="result-section" id="resultSection">
+            <h2 id="resultTitle"></h2>
+            <div id="resultMessage"></div>
+        </div>
+        
+        <!-- Rules Section -->
+        <div class="rules-section">
+            <h3>OFFICIAL RULES</h3>
+            <a href="#" class="rules-link">Terms and conditions apply</a>
         </div>
     </div>
-
+    
     <script>
-        let userInfo = {};
-        let scratchPercentage = 0;
-        let isScratching = false;
-        let hasWon = false;
-        let currentPrize = '';
+        // Prize distribution system
+        let currentUser = {};
         let entryNumber = 0;
-
-        // Prize logic (20 winners out of 1000)
-        const prizes = {
-            voucher: { count: 10, total: 10, text: "🎉 WINNER! $100 Campaign Voucher!" },
-            discount: { count: 10, total: 10, text: "🎊 WINNER! 20% Campaign Discount!" },
-            noWin: { text: "Better luck next time! Thank you for playing." }
-        };
-
-        function showError(message) {
-            const errorDiv = document.getElementById('formError');
-            errorDiv.innerHTML = `<div class="error-box">${message}</div>`;
+        
+        // Prize positions - every 50th entry wins (20 winners out of 1000)
+        const prizePositions = [];
+        for (let i = 50; i <= 1000; i += 50) {
+            prizePositions.push(i);
         }
-
-        async function submitEntry() {
+        
+        function startGame() {
+            console.log('Start game clicked');
+            
+            // Get all form values
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
             const email = document.getElementById('email').value.trim();
             const company = document.getElementById('company').value;
             const terms = document.getElementById('terms').checked;
-            const submitBtn = document.getElementById('submitBtn');
             
-            // Clear previous errors
-            document.getElementById('formError').innerHTML = '';
+            console.log('Form values:', {firstName, lastName, email, company, terms});
             
             // Validate all fields
-            if (!firstName || !lastName || !email || !company || !terms) {
-                showError('Please fill in all fields and accept terms!');
+            if (!firstName) {
+                alert('Please enter your first name.');
+                return;
+            }
+            if (!lastName) {
+                alert('Please enter your last name.');
+                return;
+            }
+            if (!email) {
+                alert('Please enter your email address.');
+                return;
+            }
+            if (!company) {
+                alert('Please select your company/agency.');
+                return;
+            }
+            if (!terms) {
+                alert('Please agree to the terms and conditions.');
                 return;
             }
             
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showError('Please enter a valid email address!');
-                return;
-            }
+            // Store user data
+            currentUser = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                company: company,
+                timestamp: new Date().toISOString()
+            };
             
-            // Store user info
-            userInfo = { firstName, lastName, email, company };
+            console.log('User data stored:', currentUser);
             
-            // Disable button
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'PROCESSING...';
-            
-            // Determine prize (simplified logic - you can make this more sophisticated)
+            // Generate entry number
             entryNumber = Math.floor(Math.random() * 1000) + 1;
-            determinePrize();
             
             // Send initial data to webhook
-            const webhookData = {
-                'first_name': firstName,
-                'last_name': lastName,
-                'email': email,
-                'company': company,
-                'timestamp': new Date().toISOString(),
-                'has_scratched': 'false',
-                'prize': 'Not yet revealed',
-                'entry_number': entryNumber
-            };
+            sendToGoogleSheets(currentUser);
             
-            try {
-                await fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(webhookData)
-                });
-                
-                console.log('Initial entry sent to webhook');
-                
-                // Show scratch card game
-                setTimeout(() => {
-                    document.getElementById('formSection').style.display = 'none';
-                    document.getElementById('scratchSection').style.display = 'block';
-                    initScratchCard();
-                }, 1000);
-                
-            } catch (error) {
-                console.error('Error:', error);
-                showError('There was an error. Please try again.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'CONTINUE TO SCRATCH CARD';
-            }
+            // Hide entry section and show scratch section
+            document.getElementById('entrySection').style.display = 'none';
+            document.getElementById('scratchSection').style.display = 'block';
+            
+            console.log('Scratch section now visible');
+            
+            // Initialize scratch card after a short delay
+            setTimeout(() => {
+                initScratchCard();
+            }, 200);
         }
-
-        function determinePrize() {
-            // Simple prize logic - adjust as needed
-            const random = Math.random() * 100;
+        
+        // Google Sheets Integration
+        function sendToGoogleSheets(userData) {
+            console.log(`Sending data to webhook:`, userData);
             
-            if (random < 1) { // 1% chance for voucher
-                hasWon = true;
-                currentPrize = prizes.voucher.text;
-            } else if (random < 2) { // 1% chance for discount
-                hasWon = true;
-                currentPrize = prizes.discount.text;
-            } else {
-                hasWon = false;
-                currentPrize = prizes.noWin.text;
-            }
-            
-            // Update prize layer
-            document.getElementById('prizeLayer').innerHTML = currentPrize;
-        }
-
-        function initScratchCard() {
-            const canvas = document.getElementById('scratchCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Create scratch-off layer
-            ctx.fillStyle = '#888';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Add "SCRATCH ME!" text
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 32px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('SCRATCH ME!', canvas.width/2, canvas.height/2);
-            
-            // Set up scratch events
-            canvas.addEventListener('mousedown', startScratching);
-            canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('mouseup', stopScratching);
-            canvas.addEventListener('mouseleave', stopScratching);
-            
-            // Touch events for mobile
-            canvas.addEventListener('touchstart', handleTouch);
-            canvas.addEventListener('touchmove', handleTouch);
-            canvas.addEventListener('touchend', stopScratching);
-        }
-
-        function startScratching(e) {
-            isScratching = true;
-            scratch(e);
-        }
-
-        function stopScratching() {
-            isScratching = false;
-        }
-
-        function handleTouch(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 'mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        }
-
-        function scratch(e) {
-            if (!isScratching) return;
-            
-            const canvas = document.getElementById('scratchCanvas');
-            const ctx = canvas.getContext('2d');
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // Create scratch effect
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(x, y, 20, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Calculate scratch percentage
-            calculateScratchPercentage();
-        }
-
-        function calculateScratchPercentage() {
-            const canvas = document.getElementById('scratchCanvas');
-            const ctx = canvas.getContext('2d');
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const pixels = imageData.data;
-            
-            let transparent = 0;
-            for (let i = 3; i < pixels.length; i += 4) {
-                if (pixels[i] < 128) transparent++;
-            }
-            
-            scratchPercentage = Math.round((transparent / (pixels.length / 4)) * 100);
-            
-            // Update progress
-            document.getElementById('progressFill').style.width = scratchPercentage + '%';
-            document.getElementById('scratchPercent').textContent = scratchPercentage + '% Scratched';
-            
-            // Check if 50% scratched
-            if (scratchPercentage >= 50 && !document.getElementById('resultSection').style.display) {
-                revealPrize();
-            }
-        }
-
-        async function revealPrize() {
-            // Send final data to webhook
-            const finalData = {
-                'first_name': userInfo.firstName,
-                'last_name': userInfo.lastName,
-                'email': userInfo.email,
-                'company': userInfo.company,
-                'timestamp': new Date().toISOString(),
-                'has_scratched': 'true',
-                'prize': currentPrize,
-                'entry_number': entryNumber,
-                'scratch_percentage': scratchPercentage
-            };
-            
-            // Send to webhook (no-cors means we can't read response, but data still sends)
+            // Send to Zapier webhook
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(finalData)
-            }).then(() => {
-                console.log('Prize result sent to webhook');
-            }).catch(() => {
-                // This is expected with no-cors mode - webhook still receives data
-                console.log('Prize data sent (no-cors mode)');
+                body: JSON.stringify({
+                    first_name: userData.firstName,
+                    last_name: userData.lastName,
+                    email: userData.email,
+                    company: userData.company,
+                    timestamp: userData.timestamp,
+                    has_scratched: 'false',
+                    prize: 'Not scratched yet',
+                    entry_number: entryNumber
+                })
+            }).catch(err => {
+                // Silently handle any errors
+                console.log('Webhook sent');
+            });
+        }
+        
+        function initScratchCard() {
+            console.log('Initializing scratch card');
+            
+            const canvas = document.getElementById('scratchCanvas');
+            const ctx = canvas.getContext('2d');
+            const prizeLayer = document.getElementById('prizeLayer');
+            
+            if (!canvas || !ctx || !prizeLayer) {
+                console.error('Canvas elements not found');
+                return;
+            }
+            
+            // Determine prize
+            const prize = determinePrize();
+            console.log('Prize determined:', prize);
+            
+            prizeLayer.innerHTML = prize.text;
+            
+            // Draw scratch-off layer
+            drawScratchLayer(ctx);
+            
+            // Add scratching functionality with 50% requirement
+            addScratchFunctionality(canvas, ctx, prize);
+        }
+        
+        function determinePrize() {
+            // Check if this entry number is a winner
+            let isWinner = prizePositions.includes(entryNumber);
+            
+            if (isWinner) {
+                // Alternate between voucher and discount
+                const prizeIndex = prizePositions.indexOf(entryNumber);
+                if (prizeIndex % 2 === 0) {
+                    return {
+                        text: '🎉 WINNER! 🎉<br/>$100 Campaign<br/>Voucher',
+                        isWinner: true,
+                        type: 'voucher'
+                    };
+                } else {
+                    return {
+                        text: '🎉 WINNER! 🎉<br/>20% Campaign<br/>Discount',
+                        isWinner: true,
+                        type: 'discount'
+                    };
+                }
+            } else {
+                return {
+                    text: 'Better Luck<br/>Next Time!<br/>🍀',
+                    isWinner: false,
+                    type: 'none'
+                };
+            }
+        }
+        
+        function drawScratchLayer(ctx) {
+            console.log('Drawing scratch layer');
+            
+            // Create silver scratch-off effect
+            const gradient = ctx.createLinearGradient(0, 0, 300, 200);
+            gradient.addColorStop(0, '#c0c0c0');
+            gradient.addColorStop(0.5, '#d0d0d0');
+            gradient.addColorStop(1, '#a0a0a0');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 300, 200);
+            
+            // Add texture dots
+            ctx.fillStyle = '#b8b8b8';
+            for (let i = 0; i < 150; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random() * 300, Math.random() * 200, Math.random() * 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Add scratch text
+            ctx.fillStyle = '#666';
+            ctx.font = 'bold 28px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('SCRATCH', 150, 85);
+            ctx.fillText('TO WIN', 150, 125);
+            
+            console.log('Scratch layer drawn');
+        }
+        
+        function addScratchFunctionality(canvas, ctx, prize) {
+            console.log('Adding scratch functionality - REQUIRES 50%');
+            
+            let isScratching = false;
+            let hasRevealed = false;
+            const totalPixels = canvas.width * canvas.height;
+            
+            function getEventPos(e, canvas) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+                const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+                
+                return {
+                    x: (clientX - rect.left) * (canvas.width / rect.width),
+                    y: (clientY - rect.top) * (canvas.height / rect.height)
+                };
+            }
+            
+            function calculateScratchPercentage() {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const pixels = imageData.data;
+                let transparentPixels = 0;
+                
+                // Count pixels with alpha channel = 0 (transparent)
+                for (let i = 3; i < pixels.length; i += 4) {
+                    if (pixels[i] === 0) {
+                        transparentPixels++;
+                    }
+                }
+                
+                return transparentPixels / totalPixels;
+            }
+            
+            function updateProgress() {
+                if (hasRevealed) return;
+                
+                const scratchPercentage = calculateScratchPercentage();
+                const percentageText = Math.round(scratchPercentage * 100);
+                
+                document.getElementById('percentageDisplay').textContent = `${percentageText}% scratched`;
+                
+                console.log(`Scratched: ${percentageText}%`);
+                
+                // 50% required to reveal
+                if (scratchPercentage >= 0.50) {
+                    hasRevealed = true;
+                    console.log('50% reached! Revealing prize...');
+                    
+                    // Update user data with result
+                    currentUser.hasScratched = true;
+                    currentUser.prize = prize.isWinner ? `${prize.type}: ${prize.text.replace(/<br\/>/g, ' ')}` : 'No prize';
+                    
+                    // Send final result to webhook
+                    sendFinalResult(prize);
+                    
+                    // Hide canvas and show result
+                    canvas.style.transition = 'opacity 0.5s ease';
+                    canvas.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        showResult(prize);
+                    }, 500);
+                }
+            }
+            
+            function scratch(e) {
+                if (!isScratching || hasRevealed) return;
+                
+                const pos = getEventPos(e, canvas);
+                
+                // Scratch away the silver coating
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 35, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Update progress
+                updateProgress();
+            }
+            
+            // Mouse events
+            canvas.addEventListener('mousedown', (e) => {
+                isScratching = true;
+                scratch(e);
             });
             
-            // Show result
-            setTimeout(() => {
-                document.getElementById('scratchSection').style.display = 'none';
-                document.getElementById('resultSection').style.display = 'block';
+            canvas.addEventListener('mousemove', scratch);
+            
+            canvas.addEventListener('mouseup', () => {
+                isScratching = false;
+            });
+            
+            canvas.addEventListener('mouseleave', () => {
+                isScratching = false;
+            });
+            
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                isScratching = true;
+                scratch(e);
+            });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                scratch(e);
+            });
+            
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                isScratching = false;
+            });
+            
+            console.log('Scratch functionality added - 50% requirement active');
+        }
+        
+        function sendFinalResult(prize) {
+            // Send final result to webhook
+            fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    first_name: currentUser.firstName,
+                    last_name: currentUser.lastName,
+                    email: currentUser.email,
+                    company: currentUser.company,
+                    timestamp: new Date().toISOString(),
+                    has_scratched: 'true',
+                    prize: prize.isWinner ? prize.type : 'no_prize',
+                    entry_number: entryNumber
+                })
+            }).catch(err => {
+                console.log('Final result sent');
+            });
+        }
+        
+        function showResult(prize) {
+            console.log('Showing result:', prize);
+            
+            document.getElementById('scratchSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            if (prize.isWinner) {
+                resultTitle.textContent = '🎉 Congratulations! 🎉';
+                resultTitle.className = 'winner';
                 
-                document.getElementById('prizeAnnouncement').innerHTML = currentPrize;
-                
-                if (hasWon) {
-                    document.getElementById('prizeDetails').innerHTML = `
-                        <h3>Congratulations ${userInfo.firstName}!</h3>
-                        <p>We'll send your prize details to: <strong>${userInfo.email}</strong></p>
-                        <p>Please allow 24-48 hours for processing.</p>
-                        <p style="font-size: 12px; color: #666;">Entry #${entryNumber}</p>
+                if (prize.type === 'voucher') {
+                    resultMessage.innerHTML = `
+                        <h3>You won a $100 Campaign Voucher!</h3>
+                        <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
+                        <p>Screenshot this page as proof of your win!</p>
+                        <p><strong>Entry #${entryNumber}</strong></p>
+                        <p style="margin-top: 20px; color: #666;">An Avid representative will contact you at ${currentUser.email} within 48 hours.</p>
                     `;
                 } else {
-                    document.getElementById('prizeDetails').innerHTML = `
-                        <h3>Thank you for playing, ${userInfo.firstName}!</h3>
-                        <p>While you didn't win this time, we appreciate your participation.</p>
-                        <p>Keep an eye on your email for future promotions!</p>
-                        <p style="font-size: 12px; color: #666;">Entry #${entryNumber}</p>
+                    resultMessage.innerHTML = `
+                        <h3>You won a 20% Campaign Discount!</h3>
+                        <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
+                        <p>Get 20% off your next campaign!</p>
+                        <p>Screenshot this page as proof of your win!</p>
+                        <p><strong>Entry #${entryNumber}</strong></p>
+                        <p style="margin-top: 20px; color: #666;">An Avid representative will contact you at ${currentUser.email} within 48 hours.</p>
                     `;
                 }
-            }, 1000);
+            } else {
+                resultTitle.textContent = 'Thanks for Playing!';
+                resultTitle.className = 'loser';
+                resultMessage.innerHTML = `
+                    <p>Thanks for playing, ${currentUser.firstName} from ${currentUser.company}!</p>
+                    <p>Better luck next time! 🍀</p>
+                    <p style="font-size: 12px; color: #666; margin-top: 20px;">Entry #${entryNumber}</p>
+                `;
+            }
         }
-
-        function resetGame() {
-            // Reset everything
-            scratchPercentage = 0;
-            isScratching = false;
-            hasWon = false;
-            currentPrize = '';
-            userInfo = {};
-            
-            // Clear form
-            document.getElementById('firstName').value = '';
-            document.getElementById('lastName').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('company').value = '';
-            document.getElementById('terms').checked = false;
-            
-            // Reset button
-            document.getElementById('submitBtn').disabled = false;
-            document.getElementById('submitBtn').textContent = 'CONTINUE TO SCRATCH CARD';
-            
-            // Show form section
-            document.getElementById('formSection').style.display = 'block';
-            document.getElementById('scratchSection').style.display = 'none';
-            document.getElementById('resultSection').style.display = 'none';
-            
-            // Reset progress
-            document.getElementById('progressFill').style.width = '0%';
-            document.getElementById('scratchPercent').textContent = '0% Scratched';
-        }
-
-        console.log('Avid Scratch & Win - Complete Game Loaded');
+        
+        // Debug info
+        console.log('✅ Avid Scratch & Win ready!');
+        console.log('Webhook integrated and active');
     </script>
 </body>
 </html>
