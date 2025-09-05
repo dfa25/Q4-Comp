@@ -381,7 +381,6 @@
             prizePositions.push(i);
         }
         
-        // FIXED: Only send data ONCE after scratching is complete
         function startGame() {
             console.log('Start game clicked');
             
@@ -430,8 +429,8 @@
             // Generate entry number
             entryNumber = Math.floor(Math.random() * 1000) + 1;
             
-            // REMOVED: Don't send initial data - only send after scratching
-            // sendToGoogleSheets(currentUser);
+            // ONLY CHANGE: Removed the initial webhook call
+            // sendToGoogleSheets(currentUser); ← REMOVED THIS LINE
             
             // Hide entry section and show scratch section
             document.getElementById('entrySection').style.display = 'none';
@@ -445,7 +444,7 @@
             }, 200);
         }
         
-        // Keep the sendFinalResult function exactly as is - this will be the ONLY entry sent
+        // KEPT: The exact same working sendFinalResult function
         function sendFinalResult(prize) {
             console.log('Sending final result to webhook via CORS proxy');
             
@@ -641,7 +640,7 @@
                     currentUser.hasScratched = true;
                     currentUser.prize = prize.isWinner ? `${prize.type}: ${prize.text.replace(/<br\/>/g, ' ')}` : 'No prize';
                     
-                    // Send final result to webhook (ONLY ENTRY)
+                    // Send final result to webhook
                     sendFinalResult(prize);
                     
                     // Hide canvas and show result
@@ -748,10 +747,50 @@
             }
         }
         
+        // Test webhook function (using CORS proxy)
+        function testWebhookFromPage() {
+            console.log('Testing webhook from page...');
+            
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const targetUrl = encodeURIComponent('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/');
+            
+            fetch(proxyUrl + targetUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    test: 'page_test',
+                    message: 'Testing from scratch game page',
+                    timestamp: new Date().toISOString()
+                })
+            })
+            .then(response => {
+                console.log('Test webhook status:', response.status);
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error(`Test failed with status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                console.log('✅ Page webhook test successful:', data);
+            })
+            .catch(err => {
+                console.error('❌ Page webhook test failed:', err);
+            });
+        }
+        
         // Debug info
         console.log('✅ Avid Scratch & Win ready!');
-        console.log('📡 Webhook integration active (SINGLE ENTRY ONLY)');
-        console.log('🎮 Game version: 7.0 (Single entry fix)');
+        console.log('📡 Webhook integration active (MINIMAL FIX)');
+        console.log('🎮 Game version: 7.1 (Minimal single entry fix)');
+        
+        // Test webhook on page load
+        window.addEventListener('load', () => {
+            console.log('Page loaded, testing webhook...');
+            testWebhookFromPage();
+        });
     </script>
 </body>
 </html>
