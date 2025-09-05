@@ -444,27 +444,88 @@
             }, 200);
         }
         
-        // Google Sheets Integration
+        // Google Sheets Integration - FIXED VERSION
         function sendToGoogleSheets(userData) {
-            console.log(`Sending data to webhook:`, userData);
+            console.log(`Sending initial data to webhook:`, userData);
             
-            // Send to Zapier webhook
+            const webhookData = {
+                first_name: userData.firstName,
+                last_name: userData.lastName,
+                email: userData.email,
+                company: userData.company,
+                timestamp: userData.timestamp,
+                has_scratched: 'false',
+                prize: 'Not scratched yet',
+                entry_number: entryNumber.toString()
+            };
+            
+            console.log('Webhook payload:', webhookData);
+            
+            // Send to Zapier webhook - FIXED: removed no-cors mode
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    first_name: userData.firstName,
-                    last_name: userData.lastName,
-                    email: userData.email,
-                    company: userData.company,
-                    timestamp: userData.timestamp,
-                    has_scratched: 'false',
-                    prize: 'Not scratched yet',
-                    entry_number: entryNumber
-                })
-            }).catch(err => {
-                // Silently handle any errors
-                console.log('Webhook sent');
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData)
+            })
+            .then(response => {
+                console.log('Webhook response status:', response.status);
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Webhook failed with status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                console.log('✅ Webhook success - initial data sent:', data);
+            })
+            .catch(err => {
+                console.error('❌ Webhook error:', err.message);
+                // Don't alert user - fail silently but log for debugging
+            });
+        }
+        
+        // Send final result - FIXED VERSION
+        function sendFinalResult(prize) {
+            console.log('Sending final result to webhook');
+            
+            const finalData = {
+                first_name: currentUser.firstName,
+                last_name: currentUser.lastName,
+                email: currentUser.email,
+                company: currentUser.company,
+                timestamp: new Date().toISOString(),
+                has_scratched: 'true',
+                prize: prize.isWinner ? (prize.type === 'voucher' ? 'voucher_winner' : 'discount_winner') : 'no_prize',
+                prize_details: prize.isWinner ? prize.text.replace(/<br\/>/g, ' ') : 'Better luck next time',
+                entry_number: entryNumber.toString()
+            };
+            
+            console.log('Final webhook payload:', finalData);
+            
+            // Send final result to webhook - FIXED: consistent with first call
+            fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(finalData)
+            })
+            .then(response => {
+                console.log('Final webhook response status:', response.status);
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Final webhook failed with status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                console.log('✅ Final webhook success - result sent:', data);
+            })
+            .catch(err => {
+                console.error('❌ Final webhook error:', err.message);
+                // Don't alert user - fail silently but log for debugging
             });
         }
         
@@ -502,13 +563,14 @@
                 const prizeIndex = prizePositions.indexOf(entryNumber);
                 if (prizeIndex % 2 === 0) {
                     return {
-                        text: '🎉 WINNER! 🎉<br/>$100 Campaign<br/>Voucher',
+                        text: '🎉 WINNER! 🎉<br/>$150 Voucher<br/>(Mecca or Uber Eats)',
                         isWinner: true,
-                        type: 'voucher'
+                        type: 'voucher',
+                        voucherType: 'Mecca or Uber Eats'
                     };
                 } else {
                     return {
-                        text: '🎉 WINNER! 🎉<br/>20% Campaign<br/>Discount',
+                        text: '🎉 WINNER! 🎉<br/>20% Campaign<br/>Discount + Free BLS',
                         isWinner: true,
                         type: 'discount'
                     };
@@ -668,36 +730,6 @@
             console.log('Scratch functionality added - 50% requirement active');
         }
         
-        function sendFinalResult(prize) {
-            console.log('Sending final result to webhook');
-            
-            const finalData = {
-                first_name: currentUser.firstName,
-                last_name: currentUser.lastName,
-                email: currentUser.email,
-                company: currentUser.company,
-                timestamp: new Date().toISOString(),
-                has_scratched: true,
-                prize: prize.isWinner ? prize.type : 'no_prize',
-                entry_number: entryNumber
-            };
-            
-            // Send final result to webhook with proper JSON
-            fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(finalData)
-            })
-            .then(response => {
-                console.log('Final result sent successfully');
-            })
-            .catch(err => {
-                console.log('Final result sent (CORS response expected)');
-            });
-        }
-        
         function showResult(prize) {
             console.log('Showing result:', prize);
             
@@ -743,7 +775,34 @@
         
         // Debug info
         console.log('✅ Avid Scratch & Win ready!');
-        console.log('Webhook integrated and active');
+        console.log('📡 Webhook integration active');
+        console.log('🎮 Game version: 2.1 (Fixed webhook)');
+        
+        // Test webhook on page load (optional - remove in production)
+        window.addEventListener('load', () => {
+            console.log('Testing webhook connection...');
+            fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    test: true,
+                    message: 'Page loaded successfully',
+                    timestamp: new Date().toISOString()
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Webhook test successful - connection confirmed');
+                } else {
+                    console.log('⚠️ Webhook test returned status:', response.status);
+                }
+            })
+            .catch(err => {
+                console.log('⚠️ Webhook test failed:', err.message);
+            });
+        });
     </script>
 </body>
 </html>
