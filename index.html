@@ -444,9 +444,9 @@
             }, 200);
         }
         
-        // Google Sheets Integration - FIXED VERSION
+        // FIXED Google Sheets Integration
         function sendToGoogleSheets(userData) {
-            console.log(`Sending initial data to webhook:`, userData);
+            console.log('Sending initial data to webhook:', userData);
             
             const webhookData = {
                 first_name: userData.firstName,
@@ -461,7 +461,7 @@
             
             console.log('Webhook payload:', webhookData);
             
-            // Send to Zapier webhook - FIXED: removed no-cors mode
+            // FIXED: Simplified fetch without response parsing issues
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
                 headers: {
@@ -471,22 +471,37 @@
             })
             .then(response => {
                 console.log('Webhook response status:', response.status);
+                console.log('Webhook response ok:', response.ok);
+                
                 if (response.ok) {
-                    return response.json();
+                    console.log('✅ Webhook success - initial data sent');
+                    return response.text(); // Use text() instead of json() to avoid parsing errors
                 } else {
                     throw new Error(`Webhook failed with status: ${response.status}`);
                 }
             })
             .then(data => {
-                console.log('✅ Webhook success - initial data sent:', data);
+                console.log('✅ Webhook response data:', data);
             })
             .catch(err => {
                 console.error('❌ Webhook error:', err.message);
-                // Don't alert user - fail silently but log for debugging
+                console.error('Full error:', err);
+                
+                // Store backup data locally
+                try {
+                    localStorage.setItem('scratchGame_backup', JSON.stringify({
+                        ...webhookData,
+                        error: err.message,
+                        timestamp: new Date().toISOString()
+                    }));
+                    console.log('💾 Data backed up locally');
+                } catch (storageError) {
+                    console.error('Storage backup failed:', storageError);
+                }
             });
         }
         
-        // Send final result - FIXED VERSION
+        // FIXED Send final result
         function sendFinalResult(prize) {
             console.log('Sending final result to webhook');
             
@@ -504,7 +519,7 @@
             
             console.log('Final webhook payload:', finalData);
             
-            // Send final result to webhook - FIXED: consistent with first call
+            // FIXED: Simplified fetch without response parsing issues
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
                 headers: {
@@ -514,18 +529,33 @@
             })
             .then(response => {
                 console.log('Final webhook response status:', response.status);
+                console.log('Final webhook response ok:', response.ok);
+                
                 if (response.ok) {
-                    return response.json();
+                    console.log('✅ Final webhook success - result sent');
+                    return response.text(); // Use text() instead of json()
                 } else {
                     throw new Error(`Final webhook failed with status: ${response.status}`);
                 }
             })
             .then(data => {
-                console.log('✅ Final webhook success - result sent:', data);
+                console.log('✅ Final webhook response data:', data);
             })
             .catch(err => {
                 console.error('❌ Final webhook error:', err.message);
-                // Don't alert user - fail silently but log for debugging
+                console.error('Full error:', err);
+                
+                // Store backup data locally
+                try {
+                    localStorage.setItem('scratchGame_final_backup', JSON.stringify({
+                        ...finalData,
+                        error: err.message,
+                        timestamp: new Date().toISOString()
+                    }));
+                    console.log('💾 Final result backed up locally');
+                } catch (storageError) {
+                    console.error('Final storage backup failed:', storageError);
+                }
             });
         }
         
@@ -773,35 +803,46 @@
             }
         }
         
-        // Debug info
-        console.log('✅ Avid Scratch & Win ready!');
-        console.log('📡 Webhook integration active');
-        console.log('🎮 Game version: 2.1 (Fixed webhook)');
-        
-        // Test webhook on page load (optional - remove in production)
-        window.addEventListener('load', () => {
-            console.log('Testing webhook connection...');
+        // Test webhook function
+        function testWebhookFromPage() {
+            console.log('Testing webhook from page...');
+            
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    test: true,
-                    message: 'Page loaded successfully',
+                    test: 'page_test',
+                    message: 'Testing from scratch game page',
                     timestamp: new Date().toISOString()
                 })
             })
             .then(response => {
+                console.log('Test webhook status:', response.status);
                 if (response.ok) {
-                    console.log('✅ Webhook test successful - connection confirmed');
+                    return response.text();
                 } else {
-                    console.log('⚠️ Webhook test returned status:', response.status);
+                    throw new Error(`Test failed with status: ${response.status}`);
                 }
             })
+            .then(data => {
+                console.log('✅ Page webhook test successful:', data);
+            })
             .catch(err => {
-                console.log('⚠️ Webhook test failed:', err.message);
+                console.error('❌ Page webhook test failed:', err);
             });
+        }
+        
+        // Debug info
+        console.log('✅ Avid Scratch & Win ready!');
+        console.log('📡 Webhook integration active (FIXED VERSION)');
+        console.log('🎮 Game version: 3.0 (Fixed webhook calls)');
+        
+        // Test webhook on page load
+        window.addEventListener('load', () => {
+            console.log('Page loaded, testing webhook...');
+            testWebhookFromPage();
         });
     </script>
 </body>
