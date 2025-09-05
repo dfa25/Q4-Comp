@@ -382,7 +382,7 @@
         }
         
         function startGame() {
-            console.log('Start game clicked');
+            console.log('=== GAME STARTED ===');
             
             // Get all form values
             const firstName = document.getElementById('firstName').value.trim();
@@ -428,9 +428,7 @@
             
             // Generate entry number
             entryNumber = Math.floor(Math.random() * 1000) + 1;
-            
-            // ONLY CHANGE: Removed the initial webhook call
-            // sendToGoogleSheets(currentUser); ← REMOVED THIS LINE
+            console.log('Entry number generated:', entryNumber);
             
             // Hide entry section and show scratch section
             document.getElementById('entrySection').style.display = 'none';
@@ -444,62 +442,36 @@
             }, 200);
         }
         
-        // KEPT: The exact same working sendFinalResult function
+        // SUPER SIMPLE webhook function
         function sendFinalResult(prize) {
-            console.log('Sending final result to webhook via CORS proxy');
+            console.log('=== SENDING WEBHOOK ===');
+            console.log('Prize data:', prize);
+            console.log('User data:', currentUser);
             
-            const finalData = {
-                first_name: currentUser.firstName,
-                last_name: currentUser.lastName,
-                email: currentUser.email,
-                company: currentUser.company,
-                timestamp: new Date().toISOString(),
-                has_scratched: 'true',
-                prize: prize.isWinner ? (prize.type === 'voucher' ? 'voucher_winner' : 'discount_winner') : 'no_prize',
-                prize_details: prize.isWinner ? prize.text.replace(/<br\/>/g, ' ') : 'Better luck next time',
-                entry_number: entryNumber.toString()
-            };
+            // Create simple data object
+            const data = new URLSearchParams();
+            data.append('first_name', currentUser.firstName);
+            data.append('last_name', currentUser.lastName);
+            data.append('email', currentUser.email);
+            data.append('company', currentUser.company);
+            data.append('timestamp', new Date().toISOString());
+            data.append('entry_number', entryNumber.toString());
+            data.append('prize', prize.isWinner ? (prize.type === 'voucher' ? 'voucher_winner' : 'discount_winner') : 'no_prize');
+            data.append('prize_details', prize.isWinner ? prize.text.replace(/<br\/>/g, ' ') : 'Better luck next time');
             
-            console.log('Final webhook payload:', finalData);
+            console.log('Sending data to webhook...');
             
-            // Use CORS proxy
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const targetUrl = encodeURIComponent('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/');
-            
-            fetch(proxyUrl + targetUrl, {
+            // Simple fetch with no-cors
+            fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(finalData)
+                mode: 'no-cors',
+                body: data
             })
-            .then(response => {
-                console.log('Final webhook response status:', response.status);
-                
-                if (response.ok) {
-                    console.log('✅ Final webhook success - result sent');
-                    return response.text();
-                } else {
-                    throw new Error(`Final webhook failed with status: ${response.status}`);
-                }
+            .then(() => {
+                console.log('✅ WEBHOOK SENT (no-cors mode)');
             })
-            .then(data => {
-                console.log('✅ Final webhook response data:', data);
-            })
-            .catch(err => {
-                console.error('❌ Final webhook error:', err.message);
-                
-                // Store backup data locally
-                try {
-                    localStorage.setItem('scratchGame_final_backup', JSON.stringify({
-                        ...finalData,
-                        error: err.message,
-                        timestamp: new Date().toISOString()
-                    }));
-                    console.log('💾 Final result backed up locally');
-                } catch (storageError) {
-                    console.error('Final storage backup failed:', storageError);
-                }
+            .catch(error => {
+                console.error('❌ WEBHOOK ERROR:', error);
             });
         }
         
@@ -636,10 +608,6 @@
                     hasRevealed = true;
                     console.log('50% reached! Revealing prize...');
                     
-                    // Update user data with result
-                    currentUser.hasScratched = true;
-                    currentUser.prize = prize.isWinner ? `${prize.type}: ${prize.text.replace(/<br\/>/g, ' ')}` : 'No prize';
-                    
                     // Send final result to webhook
                     sendFinalResult(prize);
                     
@@ -747,50 +715,9 @@
             }
         }
         
-        // Test webhook function (using CORS proxy)
-        function testWebhookFromPage() {
-            console.log('Testing webhook from page...');
-            
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const targetUrl = encodeURIComponent('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/');
-            
-            fetch(proxyUrl + targetUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    test: 'page_test',
-                    message: 'Testing from scratch game page',
-                    timestamp: new Date().toISOString()
-                })
-            })
-            .then(response => {
-                console.log('Test webhook status:', response.status);
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw new Error(`Test failed with status: ${response.status}`);
-                }
-            })
-            .then(data => {
-                console.log('✅ Page webhook test successful:', data);
-            })
-            .catch(err => {
-                console.error('❌ Page webhook test failed:', err);
-            });
-        }
-        
         // Debug info
-        console.log('✅ Avid Scratch & Win ready!');
-        console.log('📡 Webhook integration active (MINIMAL FIX)');
-        console.log('🎮 Game version: 7.1 (Minimal single entry fix)');
-        
-        // Test webhook on page load
-        window.addEventListener('load', () => {
-            console.log('Page loaded, testing webhook...');
-            testWebhookFromPage();
-        });
+        console.log('✅ Avid Scratch & Win ready! (SUPER SIMPLE VERSION)');
+        console.log('🎮 Game version: 8.0 (Debug version with lots of logging)');
     </script>
 </body>
 </html>
