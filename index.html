@@ -444,30 +444,27 @@
             }, 200);
         }
         
-        // FIXED Google Sheets Integration
+        // FINAL CORS FIX: Use FormData (no JSON, no headers)
         function sendToGoogleSheets(userData) {
             console.log('Sending initial data to webhook:', userData);
             
-            const webhookData = {
-                first_name: userData.firstName,
-                last_name: userData.lastName,
-                email: userData.email,
-                company: userData.company,
-                timestamp: userData.timestamp,
-                has_scratched: 'false',
-                prize: 'Not scratched yet',
-                entry_number: entryNumber.toString()
-            };
+            // Create FormData object - this avoids CORS preflight
+            const formData = new FormData();
+            formData.append('first_name', userData.firstName);
+            formData.append('last_name', userData.lastName);
+            formData.append('email', userData.email);
+            formData.append('company', userData.company);
+            formData.append('timestamp', userData.timestamp);
+            formData.append('has_scratched', 'false');
+            formData.append('prize', 'Not scratched yet');
+            formData.append('entry_number', entryNumber.toString());
             
-            console.log('Webhook payload:', webhookData);
+            console.log('Webhook payload (FormData):', Object.fromEntries(formData));
             
-            // FIXED: Simplified fetch without response parsing issues
+            // Use FormData - no headers needed, no CORS preflight
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(webhookData)
+                body: formData
             })
             .then(response => {
                 console.log('Webhook response status:', response.status);
@@ -475,7 +472,7 @@
                 
                 if (response.ok) {
                     console.log('✅ Webhook success - initial data sent');
-                    return response.text(); // Use text() instead of json() to avoid parsing errors
+                    return response.text();
                 } else {
                     throw new Error(`Webhook failed with status: ${response.status}`);
                 }
@@ -485,12 +482,15 @@
             })
             .catch(err => {
                 console.error('❌ Webhook error:', err.message);
-                console.error('Full error:', err);
                 
                 // Store backup data locally
                 try {
                     localStorage.setItem('scratchGame_backup', JSON.stringify({
-                        ...webhookData,
+                        first_name: userData.firstName,
+                        last_name: userData.lastName,
+                        email: userData.email,
+                        company: userData.company,
+                        entry_number: entryNumber,
                         error: err.message,
                         timestamp: new Date().toISOString()
                     }));
@@ -501,39 +501,35 @@
             });
         }
         
-        // FIXED Send final result
+        // FINAL CORS FIX: Use FormData for final result too
         function sendFinalResult(prize) {
             console.log('Sending final result to webhook');
             
-            const finalData = {
-                first_name: currentUser.firstName,
-                last_name: currentUser.lastName,
-                email: currentUser.email,
-                company: currentUser.company,
-                timestamp: new Date().toISOString(),
-                has_scratched: 'true',
-                prize: prize.isWinner ? (prize.type === 'voucher' ? 'voucher_winner' : 'discount_winner') : 'no_prize',
-                prize_details: prize.isWinner ? prize.text.replace(/<br\/>/g, ' ') : 'Better luck next time',
-                entry_number: entryNumber.toString()
-            };
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('first_name', currentUser.firstName);
+            formData.append('last_name', currentUser.lastName);
+            formData.append('email', currentUser.email);
+            formData.append('company', currentUser.company);
+            formData.append('timestamp', new Date().toISOString());
+            formData.append('has_scratched', 'true');
+            formData.append('prize', prize.isWinner ? (prize.type === 'voucher' ? 'voucher_winner' : 'discount_winner') : 'no_prize');
+            formData.append('prize_details', prize.isWinner ? prize.text.replace(/<br\/>/g, ' ') : 'Better luck next time');
+            formData.append('entry_number', entryNumber.toString());
             
-            console.log('Final webhook payload:', finalData);
+            console.log('Final webhook payload (FormData):', Object.fromEntries(formData));
             
-            // FIXED: Simplified fetch without response parsing issues
+            // Use FormData
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(finalData)
+                body: formData
             })
             .then(response => {
                 console.log('Final webhook response status:', response.status);
-                console.log('Final webhook response ok:', response.ok);
                 
                 if (response.ok) {
                     console.log('✅ Final webhook success - result sent');
-                    return response.text(); // Use text() instead of json()
+                    return response.text();
                 } else {
                     throw new Error(`Final webhook failed with status: ${response.status}`);
                 }
@@ -543,12 +539,16 @@
             })
             .catch(err => {
                 console.error('❌ Final webhook error:', err.message);
-                console.error('Full error:', err);
                 
                 // Store backup data locally
                 try {
                     localStorage.setItem('scratchGame_final_backup', JSON.stringify({
-                        ...finalData,
+                        first_name: currentUser.firstName,
+                        last_name: currentUser.lastName,
+                        email: currentUser.email,
+                        company: currentUser.company,
+                        prize: prize.isWinner ? 'winner' : 'no_prize',
+                        entry_number: entryNumber,
                         error: err.message,
                         timestamp: new Date().toISOString()
                     }));
@@ -803,20 +803,18 @@
             }
         }
         
-        // Test webhook function
+        // Test webhook function (using FormData)
         function testWebhookFromPage() {
             console.log('Testing webhook from page...');
             
+            const testFormData = new FormData();
+            testFormData.append('test', 'page_test');
+            testFormData.append('message', 'Testing from scratch game page');
+            testFormData.append('timestamp', new Date().toISOString());
+            
             fetch('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    test: 'page_test',
-                    message: 'Testing from scratch game page',
-                    timestamp: new Date().toISOString()
-                })
+                body: testFormData
             })
             .then(response => {
                 console.log('Test webhook status:', response.status);
@@ -836,8 +834,8 @@
         
         // Debug info
         console.log('✅ Avid Scratch & Win ready!');
-        console.log('📡 Webhook integration active (FIXED VERSION)');
-        console.log('🎮 Game version: 3.0 (Fixed webhook calls)');
+        console.log('📡 Webhook integration active (FORMDATA - NO CORS)');
+        console.log('🎮 Game version: 5.0 (FormData fix)');
         
         // Test webhook on page load
         window.addEventListener('load', () => {
