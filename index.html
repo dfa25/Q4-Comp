@@ -251,12 +251,15 @@
         
         <!-- Typeform Embed Section -->
         <div class="typeform-section" id="typeformSection">
-            <!-- Embed your Typeform here -->
-            <div data-tf-widget="https://nv2aizmegdd.typeform.com/to/XIsHQup2" 
+            <!-- Special instructions can go here if needed -->
+            <div style="background: #333; color: white; padding: 10px; text-align: center; font-weight: bold;">
+                Complete the survey below to unlock your Scratch & Win game!
+            </div>
+            <!-- Typeform Embed -->
+            <div data-tf-widget="XIsHQup2" 
                  data-tf-iframe-props="title=Avid Scratch & Win Entry"
                  data-tf-medium="snippet"
-                 data-tf-hidden="firstName=,lastName=,email=,company="
-                 style="width:100%;height:100%;">
+                 style="width:100%;height:calc(100% - 40px);">
             </div>
             <script src="//embed.typeform.com/next/embed.js"></script>
         </div>
@@ -304,6 +307,7 @@
         // User data and game state
         let currentUser = {};
         let entryNumber = 0;
+        let formCompleted = false;
         
         // Prize positions - every 50th entry wins
         const prizePositions = [];
@@ -311,63 +315,38 @@
             prizePositions.push(i);
         }
         
-        // OPTION 1: Listen for Typeform completion event
-        // This works when Typeform is embedded on the same page
+        // Listen for Typeform completion and auto-transition to scratch game
         window.addEventListener('message', function(event) {
-            if (event.data && event.data.type === 'form-submit') {
-                console.log('Typeform submitted!', event.data);
+            // Security check - make sure message is from Typeform
+            if (!event.origin.includes('typeform.com')) return;
+            
+            console.log('Received message:', event.data);
+            
+            // Typeform sends a form-submit event when completed
+            if (event.data && event.data.type === 'form-submit' && !formCompleted) {
+                formCompleted = true;
+                console.log('Typeform completed! Starting scratch game...');
                 
-                // Extract data from Typeform response
-                // The structure depends on your Typeform configuration
-                const formData = event.data.response;
+                // Extract any available data
+                const responseId = event.data.responseId || Math.random().toString(36).substr(2, 9);
                 
-                // Map the Typeform fields to your user object
-                // You'll need to adjust these based on your Typeform field names/IDs
+                // Since we can't get the actual form data from embedded Typeform,
+                // we'll use generic placeholders or you can prompt for info
                 currentUser = {
-                    firstName: formData.answers?.find(a => a.field.id === 'firstName_field_id')?.text || '',
-                    lastName: formData.answers?.find(a => a.field.id === 'lastName_field_id')?.text || '',
-                    email: formData.answers?.find(a => a.field.id === 'email_field_id')?.email || '',
-                    company: formData.answers?.find(a => a.field.id === 'company_field_id')?.choice?.label || '',
+                    firstName: 'Valued',
+                    lastName: 'Player',
+                    email: 'player@avidcollective.com',
+                    company: 'Agency Partner',
+                    responseId: responseId,
                     timestamp: new Date().toISOString()
                 };
                 
-                startScratchGame();
+                // Auto-transition to scratch game
+                setTimeout(() => {
+                    startScratchGame();
+                }, 1000);
             }
         });
-        
-        // OPTION 2: Parse data from URL parameters
-        // This works when redirecting from Typeform to this page
-        function parseURLParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            if (urlParams.has('firstName')) {
-                currentUser = {
-                    firstName: urlParams.get('firstName'),
-                    lastName: urlParams.get('lastName'),
-                    email: urlParams.get('email'),
-                    company: urlParams.get('company'),
-                    timestamp: new Date().toISOString()
-                };
-                
-                // Hide Typeform section if we came from a redirect
-                document.getElementById('typeformSection').style.display = 'none';
-                startScratchGame();
-            }
-        }
-        
-        // OPTION 3: Manual trigger button (for testing)
-        // You can add a button in Typeform's ending screen that calls this function
-        function proceedToScratch(firstName, lastName, email, company) {
-            currentUser = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                company: company,
-                timestamp: new Date().toISOString()
-            };
-            
-            startScratchGame();
-        }
         
         function startScratchGame() {
             console.log('Starting scratch game with user data:', currentUser);
@@ -612,11 +591,9 @@
             }
         }
         
-        // Check for URL parameters on page load
-        window.addEventListener('DOMContentLoaded', parseURLParams);
-        
         console.log('✅ Typeform + Scratch & Win Integration Ready');
-        console.log('📋 No webhook - data stored locally');
+        console.log('📋 Form completion triggers scratch game automatically');
+        console.log('🎮 No redirect needed - everything happens on this page');
     </script>
 </body>
 </html>
