@@ -67,86 +67,49 @@
             border-bottom: 15px solid transparent;
         }
         
-        .main-content {
+        /* Typeform Embed Section */
+        .typeform-section {
+            background: white;
+            border: 2px dashed #666;
+            border-radius: 10px;
+            padding: 0;
+            text-align: center;
+            margin-bottom: 30px;
+            overflow: hidden;
+            height: 600px;
+        }
+        
+        /* Waiting Screen */
+        .waiting-screen {
             background: white;
             border: 2px dashed #666;
             border-radius: 10px;
             padding: 30px;
             text-align: center;
-            margin-bottom: 30px;
+            display: none;
         }
         
-        .entry-section h2 {
-            font-size: 2.5rem;
+        .waiting-screen h2 {
             color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .entry-section p {
-            font-size: 1.2rem;
-            color: #666;
             margin-bottom: 20px;
         }
         
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #333;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
         }
         
-        .form-group {
-            text-align: left;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-        
-        input[type="text"], input[type="email"], select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        select {
-            background: white;
-            cursor: pointer;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        
-        .enter-btn, .submit-btn {
-            background: #333;
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .enter-btn:hover, .submit-btn:hover {
-            background: #555;
-        }
-        
+        /* Scratch Section */
         .scratch-section {
             background: white;
             border: 2px dashed #666;
@@ -246,8 +209,8 @@
         }
         
         @media (max-width: 600px) {
-            .form-grid {
-                grid-template-columns: 1fr;
+            .typeform-section {
+                height: 500px;
             }
             
             .scratch-card {
@@ -255,7 +218,7 @@
                 height: 160px;
             }
             
-            .main-content, .scratch-section {
+            .scratch-section {
                 padding: 20px;
             }
         }
@@ -286,56 +249,23 @@
             </div>
         </div>
         
-        <!-- Entry Section -->
-        <div class="main-content" id="entrySection">
-            <div class="entry-section">
-                <h2>Scratch & Win</h2>
-                <p>Enter your details below for your chance to scratch and win!</p>
-                
-                <!-- Entry Form with ALL Required Fields -->
-                <div style="margin: 20px 0;">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="firstName">FIRST NAME</label>
-                            <input type="text" id="firstName" name="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">LAST NAME</label>
-                            <input type="text" id="lastName" name="lastName" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="email">EMAIL</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="company">COMPANY/AGENCY</label>
-                            <select id="company" name="company" required>
-                                <option value="">Select your company...</option>
-                                <option value="Carat">Carat</option>
-                                <option value="Dentsu">Dentsu</option>
-                                <option value="Essence Mediacom">Essence Mediacom</option>
-                                <option value="Flow">Flow</option>
-                                <option value="Havas">Havas</option>
-                                <option value="Initiative">Initiative</option>
-                                <option value="Kaimera">Kaimera</option>
-                                <option value="Mindshare">Mindshare</option>
-                                <option value="Nunn">Nunn</option>
-                                <option value="OMD">OMD</option>
-                                <option value="PHD">PHD</option>
-                                <option value="Spark Foundry">Spark Foundry</option>
-                                <option value="Starcom">Starcom</option>
-                                <option value="Universal McCann">Universal McCann</option>
-                                <option value="Wavemaker">Wavemaker</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">I agree to receive updates and agree to terms</label>
-                    </div>
-                    <button type="button" class="enter-btn" onclick="startGame()">CONTINUE TO SCRATCH CARD</button>
-                </div>
+        <!-- Typeform Embed Section -->
+        <div class="typeform-section" id="typeformSection">
+            <!-- Embed your Typeform here -->
+            <div data-tf-widget="https://nv2aizmegdd.typeform.com/to/XIsHQup2" 
+                 data-tf-iframe-props="title=Avid Scratch & Win Entry"
+                 data-tf-medium="snippet"
+                 data-tf-hidden="firstName=,lastName=,email=,company="
+                 style="width:100%;height:100%;">
             </div>
+            <script src="//embed.typeform.com/next/embed.js"></script>
+        </div>
+        
+        <!-- Waiting Screen -->
+        <div class="waiting-screen" id="waitingScreen">
+            <h2>Processing Your Entry...</h2>
+            <div class="spinner"></div>
+            <p>Get ready to scratch!</p>
         </div>
         
         <!-- Scratch Section -->
@@ -371,51 +301,63 @@
     </div>
     
     <script>
-        // Prize distribution system
+        // User data and game state
         let currentUser = {};
         let entryNumber = 0;
         
-        // Prize positions - every 50th entry wins (20 winners out of 1000)
+        // Prize positions - every 50th entry wins
         const prizePositions = [];
         for (let i = 50; i <= 1000; i += 50) {
             prizePositions.push(i);
         }
         
-        function startGame() {
-            console.log('Start game clicked');
+        // OPTION 1: Listen for Typeform completion event
+        // This works when Typeform is embedded on the same page
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'form-submit') {
+                console.log('Typeform submitted!', event.data);
+                
+                // Extract data from Typeform response
+                // The structure depends on your Typeform configuration
+                const formData = event.data.response;
+                
+                // Map the Typeform fields to your user object
+                // You'll need to adjust these based on your Typeform field names/IDs
+                currentUser = {
+                    firstName: formData.answers?.find(a => a.field.id === 'firstName_field_id')?.text || '',
+                    lastName: formData.answers?.find(a => a.field.id === 'lastName_field_id')?.text || '',
+                    email: formData.answers?.find(a => a.field.id === 'email_field_id')?.email || '',
+                    company: formData.answers?.find(a => a.field.id === 'company_field_id')?.choice?.label || '',
+                    timestamp: new Date().toISOString()
+                };
+                
+                startScratchGame();
+            }
+        });
+        
+        // OPTION 2: Parse data from URL parameters
+        // This works when redirecting from Typeform to this page
+        function parseURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
             
-            // Get all form values
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const company = document.getElementById('company').value;
-            const terms = document.getElementById('terms').checked;
-            
-            console.log('Form values:', {firstName, lastName, email, company, terms});
-            
-            // Validate all fields
-            if (!firstName) {
-                alert('Please enter your first name.');
-                return;
+            if (urlParams.has('firstName')) {
+                currentUser = {
+                    firstName: urlParams.get('firstName'),
+                    lastName: urlParams.get('lastName'),
+                    email: urlParams.get('email'),
+                    company: urlParams.get('company'),
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Hide Typeform section if we came from a redirect
+                document.getElementById('typeformSection').style.display = 'none';
+                startScratchGame();
             }
-            if (!lastName) {
-                alert('Please enter your last name.');
-                return;
-            }
-            if (!email) {
-                alert('Please enter your email address.');
-                return;
-            }
-            if (!company) {
-                alert('Please select your company/agency.');
-                return;
-            }
-            if (!terms) {
-                alert('Please agree to the terms and conditions.');
-                return;
-            }
-            
-            // Store user data
+        }
+        
+        // OPTION 3: Manual trigger button (for testing)
+        // You can add a button in Typeform's ending screen that calls this function
+        function proceedToScratch(firstName, lastName, email, company) {
             currentUser = {
                 firstName: firstName,
                 lastName: lastName,
@@ -424,82 +366,25 @@
                 timestamp: new Date().toISOString()
             };
             
-            console.log('User data stored:', currentUser);
+            startScratchGame();
+        }
+        
+        function startScratchGame() {
+            console.log('Starting scratch game with user data:', currentUser);
             
             // Generate entry number
             entryNumber = Math.floor(Math.random() * 1000) + 1;
             
-            // REMOVED the initial sendToGoogleSheets call to prevent duplicate entries
+            // Show waiting screen briefly
+            document.getElementById('typeformSection').style.display = 'none';
+            document.getElementById('waitingScreen').style.display = 'block';
             
-            // Hide entry section and show scratch section
-            document.getElementById('entrySection').style.display = 'none';
-            document.getElementById('scratchSection').style.display = 'block';
-            
-            console.log('Scratch section now visible');
-            
-            // Initialize scratch card after a short delay
+            // After a short delay, show scratch section
             setTimeout(() => {
+                document.getElementById('waitingScreen').style.display = 'none';
+                document.getElementById('scratchSection').style.display = 'block';
                 initScratchCard();
-            }, 200);
-        }
-        
-        // KEPT EXACT SAME as working version
-        function sendFinalResult(prize) {
-            console.log('Sending final result to webhook via CORS proxy');
-            
-            const finalData = {
-                first_name: currentUser.firstName,
-                last_name: currentUser.lastName,
-                email: currentUser.email,
-                company: currentUser.company,
-                timestamp: new Date().toISOString(),
-                has_scratched: 'true',
-                prize: prize.isWinner ? (prize.type === 'voucher' ? 'voucher_winner' : 'discount_winner') : 'no_prize',
-                prize_details: prize.isWinner ? prize.text.replace(/<br\/>/g, ' ') : 'Better luck next time',
-                entry_number: entryNumber.toString()
-            };
-            
-            console.log('Final webhook payload:', finalData);
-            
-            // Use CORS proxy
-            const proxyUrl = 'https://api.allorigins.win/raw?url=';
-            const targetUrl = encodeURIComponent('https://hooks.zapier.com/hooks/catch/18589917/uhnih4c/');
-            
-            fetch(proxyUrl + targetUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(finalData)
-            })
-            .then(response => {
-                console.log('Final webhook response status:', response.status);
-                
-                if (response.ok) {
-                    console.log('✅ Final webhook success - result sent');
-                    return response.text();
-                } else {
-                    throw new Error(`Final webhook failed with status: ${response.status}`);
-                }
-            })
-            .then(data => {
-                console.log('✅ Final webhook response data:', data);
-            })
-            .catch(err => {
-                console.error('❌ Final webhook error:', err.message);
-                
-                // Store backup data locally
-                try {
-                    localStorage.setItem('scratchGame_final_backup', JSON.stringify({
-                        ...finalData,
-                        error: err.message,
-                        timestamp: new Date().toISOString()
-                    }));
-                    console.log('💾 Final result backed up locally');
-                } catch (storageError) {
-                    console.error('Final storage backup failed:', storageError);
-                }
-            });
+            }, 2000);
         }
         
         function initScratchCard() {
@@ -508,11 +393,6 @@
             const canvas = document.getElementById('scratchCanvas');
             const ctx = canvas.getContext('2d');
             const prizeLayer = document.getElementById('prizeLayer');
-            
-            if (!canvas || !ctx || !prizeLayer) {
-                console.error('Canvas elements not found');
-                return;
-            }
             
             // Determine prize
             const prize = determinePrize();
@@ -523,7 +403,7 @@
             // Draw scratch-off layer
             drawScratchLayer(ctx);
             
-            // Add scratching functionality with 50% requirement
+            // Add scratching functionality
             addScratchFunctionality(canvas, ctx, prize);
         }
         
@@ -532,7 +412,6 @@
             let isWinner = prizePositions.includes(entryNumber);
             
             if (isWinner) {
-                // Alternate between voucher and discount
                 const prizeIndex = prizePositions.indexOf(entryNumber);
                 if (prizeIndex % 2 === 0) {
                     return {
@@ -558,8 +437,6 @@
         }
         
         function drawScratchLayer(ctx) {
-            console.log('Drawing scratch layer');
-            
             // Create silver scratch-off effect
             const gradient = ctx.createLinearGradient(0, 0, 300, 200);
             gradient.addColorStop(0, '#c0c0c0');
@@ -583,13 +460,9 @@
             ctx.textAlign = 'center';
             ctx.fillText('SCRATCH', 150, 85);
             ctx.fillText('TO WIN', 150, 125);
-            
-            console.log('Scratch layer drawn');
         }
         
         function addScratchFunctionality(canvas, ctx, prize) {
-            console.log('Adding scratch functionality - REQUIRES 50%');
-            
             let isScratching = false;
             let hasRevealed = false;
             const totalPixels = canvas.width * canvas.height;
@@ -610,7 +483,6 @@
                 const pixels = imageData.data;
                 let transparentPixels = 0;
                 
-                // Count pixels with alpha channel = 0 (transparent)
                 for (let i = 3; i < pixels.length; i += 4) {
                     if (pixels[i] === 0) {
                         transparentPixels++;
@@ -628,21 +500,22 @@
                 
                 document.getElementById('percentageDisplay').textContent = `${percentageText}% scratched`;
                 
-                console.log(`Scratched: ${percentageText}%`);
-                
-                // 50% required to reveal
                 if (scratchPercentage >= 0.50) {
                     hasRevealed = true;
-                    console.log('50% reached! Revealing prize...');
                     
-                    // Update user data with result
+                    // Store result locally (no webhook)
                     currentUser.hasScratched = true;
-                    currentUser.prize = prize.isWinner ? `${prize.type}: ${prize.text.replace(/<br\/>/g, ' ')}` : 'No prize';
+                    currentUser.prize = prize;
                     
-                    // Send final result to webhook
-                    sendFinalResult(prize);
+                    // Save to localStorage as backup
+                    localStorage.setItem('scratchGameResult', JSON.stringify({
+                        user: currentUser,
+                        entryNumber: entryNumber,
+                        prize: prize,
+                        timestamp: new Date().toISOString()
+                    }));
                     
-                    // Hide canvas and show result
+                    // Reveal prize
                     canvas.style.transition = 'opacity 0.5s ease';
                     canvas.style.opacity = '0';
                     
@@ -657,13 +530,11 @@
                 
                 const pos = getEventPos(e, canvas);
                 
-                // Scratch away the silver coating
                 ctx.globalCompositeOperation = 'destination-out';
                 ctx.beginPath();
                 ctx.arc(pos.x, pos.y, 35, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Update progress
                 updateProgress();
             }
             
@@ -683,7 +554,7 @@
                 isScratching = false;
             });
             
-            // Touch events for mobile
+            // Touch events
             canvas.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 isScratching = true;
@@ -699,13 +570,9 @@
                 e.preventDefault();
                 isScratching = false;
             });
-            
-            console.log('Scratch functionality added - 50% requirement active');
         }
         
         function showResult(prize) {
-            console.log('Showing result:', prize);
-            
             document.getElementById('scratchSection').style.display = 'none';
             document.getElementById('resultSection').style.display = 'block';
             
@@ -728,7 +595,6 @@
                     resultMessage.innerHTML = `
                         <h3>You won 20% OFF your next campaign + Free BLS!*</h3>
                         <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
-                        <p>Get 20% off + Free Brand Lift Study on your next campaign!</p>
                         <p style="font-size: 12px; color: #666;">*Campaign must be $65,000+ • BLS requires 6-week runtime & 20,000 minimum article views</p>
                         <p>Screenshot this page as proof of your win!</p>
                         <p><strong>Entry #${entryNumber}</strong></p>
@@ -746,10 +612,11 @@
             }
         }
         
-        // Debug info
-        console.log('✅ Avid Scratch & Win ready!');
-        console.log('📡 Webhook integration active (BACK TO WORKING VERSION)');
-        console.log('🎮 Game version: 8.1 (Back to working, no duplicates)');
+        // Check for URL parameters on page load
+        window.addEventListener('DOMContentLoaded', parseURLParams);
+        
+        console.log('✅ Typeform + Scratch & Win Integration Ready');
+        console.log('📋 No webhook - data stored locally');
     </script>
 </body>
 </html>
