@@ -264,8 +264,23 @@
             <script src="//embed.typeform.com/next/embed.js"></script>
         </div>
         
-        <!-- Waiting Screen -->
-        <div class="waiting-screen" id="waitingScreen">
+      <!-- Waiting Screen -->
+<div class="waiting-screen" id="waitingScreen">
+    <h2>Processing Your Entry...</h2>
+    <div class="spinner"></div>
+    <p>Get ready to scratch!</p>
+</div>
+  <!-- Waiting Screen -->
+      <div<!-- Waiting Screen -->
+<div class="waiting-screen" id="waitingScreen">
+    <h2>Processing Your Entry...</h2>
+    <div class="spinner"></div>
+    <p>Get ready to scratch!</p>
+</div>
+ class="waiting-screen" id="waitingScreen">
+    <h2>Processing Your Entry...</h2>
+    <div class="spinner"></div>
+    <p>Get ready to scratch!</p>/div><div class="waiting-screen" id="waitingScreen"<div class="waiting-screen" id="waitingScreen"><iv class="waiting-screen" id="waitingScreen">  <diclass="waiting-scren"v clas50waiting-screen" id="waitingScreen">
             <h2>Processing Your Entry...</h2>
             <div class="spinner"></div>
             <p>Get ready to scratch!</p>
@@ -278,7 +293,7 @@
             
             <div class="prizes-list">
                 <p><strong>Possible Prizes:</strong></p>
-                <p>$150 Mecca or Uber Eats Voucher • 20% Campaign Discount + Free BLS!*</p>
+                <p>$50 Mecca or Uber Eats Voucher • 20% Campaign Discount + Free BLS!*</p>
             </div>
             
             <div class="scratch-card">
@@ -394,7 +409,7 @@
                 const prizeIndex = prizePositions.indexOf(entryNumber);
                 if (prizeIndex % 2 === 0) {
                     return {
-                        text: '🎉 WINNER! 🎉<br/>$150 Voucher<br/>(Mecca or Uber Eats)',
+                        text: '🎉 WINNER! 🎉<br/>$50 Voucher<br/>(Mecca or Uber Eats)',
                         isWinner: true,
                         type: 'voucher',
                         voucherType: 'Mecca or Uber Eats'
@@ -564,7 +579,7 @@
                 
                 if (prize.type === 'voucher') {
                     resultMessage.innerHTML = `
-                        <h3>You won a $150 ${prize.voucherType} Voucher!</h3>
+                        <h3>You won a $50 ${prize.voucherType} Voucher!</h3>
                         <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
                         <p>Screenshot this page as proof of your win!</p>
                         <p><strong>Entry #${entryNumber}</strong></p>
