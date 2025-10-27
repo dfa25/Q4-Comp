@@ -1,330 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avid Collective - Scratch & Win</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #7dd3fc 0%, #a855f7 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        .bg-icons {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            z-index: 0;
-        }
-        
-        .bg-icon {
-            position: absolute;
-            font-size: 2rem;
-            color: white;
-        }
-        
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .logo h1 {
-            color: #333;
-            font-size: 2rem;
-            margin-right: 10px;
-        }
-        
-        .logo .play-icon {
-            width: 0;
-            height: 0;
-            border-left: 20px solid #10b981;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-        }
-        
-        .typeform-section {
-            background: white;
-            border: 2px dashed #666;
-            border-radius: 10px;
-            padding: 0;
-            text-align: center;
-            margin-bottom: 30px;
-            overflow: hidden;
-            height: 600px;
-        }
-        
-        .waiting-screen {
-            background: white;
-            border: 2px dashed #666;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            display: none;
-        }
-        
-        .waiting-screen h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #333;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .scratch-section {
-            background: white;
-            border: 2px dashed #666;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            display: none;
-        }
-        
-        .scratch-card {
-            position: relative;
-            width: 300px;
-            height: 200px;
-            margin: 20px auto;
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: grab;
-            border: 2px solid #ccc;
-        }
-        
-        .scratch-card:active {
-            cursor: grabbing;
-        }
-        
-        .prize-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #f0f0f0 0%, #e0e0e0 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-            z-index: 1;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .scratch-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-        }
-        
-        .result-section {
-            background: white;
-            border: 2px dashed #666;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            display: none;
-            margin-top: 20px;
-        }
-        
-        .winner {
-            color: #10b981;
-        }
-        
-        .loser {
-            color: #ef4444;
-        }
-        
-        .rules-section {
-            background: #000;
-            color: white;
-            padding: 30px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        
-        .rules-section h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .rules-link {
-            color: #666;
-            text-decoration: underline;
-        }
-        
-        .prizes-list {
-            margin: 20px 0;
-            line-height: 1.8;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .scratch-progress {
-            margin: 10px 0;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        @media (max-width: 600px) {
-            .typeform-section {
-                height: 500px;
-            }
-            
-            .scratch-card {
-                width: 250px;
-                height: 160px;
-            }
-            
-            .scratch-section {
-                padding: 20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avid Collective - Scratch & Win</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #7dd3fc 0%, #a855f7 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+/* Background icons */
+.bg-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  z-index: 0;
+}
+.bg-icon {
+  position: absolute;
+  font-size: 2rem;
+  color: white;
+}
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.logo h1 {
+  color: #333;
+  font-size: 2rem;
+  margin-right: 10px;
+}
+.logo .play-icon {
+  width: 0;
+  height: 0;
+  border-left: 20px solid #10b981;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+/* Typeform Embed Section */
+.typeform-section {
+  background: white;
+  border: 2px dashed #666;
+  border-radius: 10px;
+  padding: 0;
+  text-align: center;
+  margin-bottom: 30px;
+  overflow: hidden;
+  height: 600px;
+}
+/* Waiting Screen */
+.waiting-screen {
+  background: white;
+  border: 2px dashed #666;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  display: none;
+}
+.waiting-screen h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #333;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* Scratch Section */
+.scratch-section {
+  background: white;
+  border: 2px dashed #666;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  display: none;
+}
+.scratch-card {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  margin: 20px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: grab;
+  border: 2px solid #ccc;
+}
+.scratch-card:active {
+  cursor: grabbing;
+}
+.prize-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #f0f0f0 0%, #e0e0e0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  z-index: 1;
+  text-align: center;
+  padding: 20px;
+}
+.scratch-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.result-section {
+  background: white;
+  border: 2px dashed #666;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  display: none;
+  margin-top: 20px;
+}
+.winner {
+  color: #10b981;
+}
+.loser {
+  color: #ef4444;
+}
+.rules-section {
+  background: #000;
+  color: white;
+  padding: 30px;
+  text-align: center;
+  margin-top: 30px;
+}
+.rules-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+.rules-link {
+  color: #666;
+  text-decoration: underline;
+}
+.prizes-list {
+  margin: 20px 0;
+  line-height: 1.8;
+  font-size: 0.9rem;
+  color: #666;
+}
+.scratch-progress {
+  margin: 10px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+@media (max-width: 600px) {
+  .typeform-section { height: 500px; }
+  .scratch-card { width: 250px; height: 160px; }
+  .scratch-section { padding: 20px; }
+}
+</style>
 </head>
 <body>
-    <div class="bg-icons">
-        <div class="bg-icon" style="top: 10%; left: 5%;">👤</div>
-        <div class="bg-icon" style="top: 20%; right: 10%;">💎</div>
-        <div class="bg-icon" style="top: 40%; left: 8%;">📞</div>
-        <div class="bg-icon" style="top: 50%; right: 15%;">🌐</div>
-        <div class="bg-icon" style="top: 60%; left: 12%;">📧</div>
-        <div class="bg-icon" style="top: 70%; right: 8%;">🔍</div>
-        <div class="bg-icon" style="top: 80%; left: 15%;">🎵</div>
-        <div class="bg-icon" style="top: 30%; left: 20%;">📱</div>
-        <div class="bg-icon" style="top: 15%; right: 25%;">📷</div>
-        <div class="bg-icon" style="top: 75%; right: 20%;">💬</div>
-        <div class="bg-icon" style="bottom: 10%; left: 25%;">📋</div>
-    </div>
-    
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <h1>Avid</h1>
-                <div class="play-icon"></div>
-            </div>
-        </div>
-        
-        <div class="typeform-section" id="typeformSection">
-            <div style="background: #333; color: white; padding: 10px; text-align: center; font-weight: bold;">
-                Complete the survey below to unlock your Scratch & Win game!
-            </div>
-            <div data-tf-widget="XIsHQup2" 
-                 data-tf-iframe-props="title=Avid Scratch & Win Entry"
-                 data-tf-medium="snippet"
-                 style="width:100%;height:calc(100% - 40px);">
-            </div>
-            <script src="//embed.typeform.com/next/embed.js"></script>
-        </div>
-        
-        <div class="waiting-screen" id="waitingScreen">
-            <h2>Processing Your Entry...</h2>
-            <div class="spinner"></div>
-            <p>Get ready to scratch!</p>
-        </div>
-        
-        <div class="scratch-section" id="scratchSection">
-            <h2>Scratch to Find Out if You Won!</h2>
-            <p>Use your mouse or finger to scratch off the silver area and discover your result</p>
-            <div class="prizes-list">
-                <p><strong>Possible Prizes:</strong></p>
-                <p>$50 Mecca or Uber Eats Voucher • 20% Campaign Discount + Free BLS!*</p>
-            </div>
-            <div class="scratch-card">
-                <div class="prize-layer" id="prizeLayer">Loading your result...</div>
-                <canvas class="scratch-canvas" id="scratchCanvas" width="300" height="200"></canvas>
-            </div>
-            <div class="scratch-progress" id="scratchProgress">Scratch off at least 50% to reveal your result</div>
-            <div class="scratch-progress" id="percentageDisplay" style="font-weight: bold; color: #333;">0% scratched</div>
-        </div>
-        
-        <div class="result-section" id="resultSection">
-            <h2 id="resultTitle"></h2>
-            <div id="resultMessage"></div>
-        </div>
-        
-        <div class="rules-section">
-            <h3>OFFICIAL RULES</h3>
-            <a href="#" class="rules-link">Terms and conditions apply</a>
-        </div>
-    </div>
-    
-    <script>
-        function determinePrize() {
-            const prizePositions = [];
-            for (let i = 10; i <= 1000; i += 10) prizePositions.push(i);
-            const entryNumber = Math.floor(Math.random() * 1000) + 1;
-            const isWinner = prizePositions.includes(entryNumber);
-            if (isWinner) {
-                const prizeIndex = prizePositions.indexOf(entryNumber);
-                if (prizeIndex % 2 === 0) {
-                    return {
-                        text: '🎉 WINNER! 🎉<br/>$50 Voucher<br/>(Mecca or Uber Eats)',
-                        isWinner: true,
-                        type: 'voucher',
-                        voucherType: 'Mecca or Uber Eats'
-                    };
-                } else {
-                    return {
-                        text: '🎉 WINNER! 🎉<br/>20% Campaign<br/>Discount + Free BLS',
-                        isWinner: true,
-                        type: 'discount'
-                    };
-                }
-            } else {
-                return { text: 'Better Luck<br/>Next Time!<br/>🍀', isWinner: false };
-            }
-        }
+<!-- Background Icons -->
+<div class="bg-icons">
+  <div class="bg-icon" style="top:10%;left:5%;"></div>
+  <div class="bg-icon" style="top:20%;right:10%;"></div>
+  <div class="bg-icon" style="top:40%;left:8%;"></div>
+  <div class="bg-icon" style="top:50%;right:15%;"></div>
+  <div class="bg-icon" style="top:60%;left:12%;"></div>
+  <div class="bg-icon" style="top:70%;right:8%;"></div>
+  <div class="bg-icon" style="top:80%;left:15%;"></div>
+  <div class="bg-icon" style="top:30%;left:20%;"></div>
+  <div class="bg-icon" style="top:15%;right:25%;"></div>
+  <div class="bg-icon" style="top:75%;right:20%;"></div>
+  <div class="bg-icon" style="bottom:10%;left:25%;"></div>
+</div>
 
-        function showResult(prize) {
-            const resultTitle = document.getElementById('resultTitle');
-            const resultMessage = document.getElementById('resultMessage');
-            if (prize.isWinner && prize.type === 'voucher') {
-                resultTitle.textContent = '🎉 Congratulations! 🎉';
-                resultMessage.innerHTML = `
-                    <h3>You won a $50 ${prize.voucherType} Voucher!</h3>
-                    <p>Screenshot this page as proof of your win!</p>
-                `;
-            }
-        }
-    </script>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <h1>Avid</h1>
+      <div class="play-icon"></div>
+    </div>
+  </div>
+
+  <!-- Typeform Section -->
+  <div class="typeform-section" id="typeformSection">
+    <div style="background:#333;color:white;padding:10px;text-align:center;font-weight:bold;">
+      Complete the survey below to unlock your Scratch & Win game!
+    </div>
+    <div data-tf-widget="XIsHQup2"
+         data-tf-iframe-props="title=Avid Scratch & Win Entry"
+         data-tf-medium="snippet"
+         style="width:100%;height:calc(100% - 40px);"></div>
+    <script src="//embed.typeform.com/next/embed.js"></script>
+  </div>
+
+  <!-- Waiting Screen -->
+  <div class="waiting-screen" id="waitingScreen">
+    <h2>Processing Your Entry...</h2>
+    <div class="spinner"></div>
+    <p>Get ready to scratch!</p>
+  </div>
+
+  <!-- Scratch Section -->
+  <div class="scratch-section" id="scratchSection">
+    <h2>Scratch to Find Out if You Won!</h2>
+    <p>Use your mouse or finger to scratch off the silver area and discover your result</p>
+    <div class="prizes-list">
+      <p><strong>Possible Prizes:</strong></p>
+      <p>$50 Mecca or Uber Eats Voucher • 20% Campaign Discount + Free BLS!*</p>
+    </div>
+    <div class="scratch-card">
+      <div class="prize-layer" id="prizeLayer">Loading your result...</div>
+      <canvas class="scratch-canvas" id="scratchCanvas" width="300" height="200"></canvas>
+    </div>
+    <div class="scratch-progress" id="scratchProgress">Scratch off at least 50% to reveal your result</div>
+    <div class="scratch-progress" id="percentageDisplay" style="font-weight:bold;color:#333;">0% scratched</div>
+  </div>
+
+  <!-- Result Section -->
+  <div class="result-section" id="resultSection">
+    <h2 id="resultTitle"></h2>
+    <div id="resultMessage"></div>
+  </div>
+
+  <!-- Rules Section -->
+  <div class="rules-section">
+    <h3>OFFICIAL RULES</h3>
+    <a href="#" class="rules-link">Terms and conditions apply</a>
+  </div>
+</div>
+
+<script>
+// User data and game state
+let currentUser = {};
+let entryNumber = 0;
+let formCompleted = false;
+
+// Prize positions - every 10th entry wins
+const prizePositions = [];
+for (let i = 10; i <= 1000; i += 10) {
+  prizePositions.push(i);
+}
+
+// Listen for Typeform completion and auto-transition
+window.addEventListener('message', function(event) {
+  if (!event.origin.includes('typeform.com')) return;
+  if (event.data && event.data.type === 'form-submit' && !formCompleted) {
+    formCompleted = true;
+    const responseId = event.data.responseId || Math.random().toString(36).substr(2, 9);
+    currentUser = {
+      firstName: 'Valued',
+      lastName: 'Player',
+      email: 'player@avidcollective.com',
+      company: 'Agency Partner',
+      responseId: responseId,
+      timestamp: new Date().toISOString()
+    };
+    setTimeout(() => { startScratchGame(); }, 1000);
+  }
+});
+
+function startScratchGame() {
+  entryNumber = Math.floor(Math.random() * 1000) + 1;
+  document.getElementById('typeformSection').style.display = 'none';
+  document.getElementById('waitingScreen').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('waitingScreen').style.display = 'none';
+    document.getElementById('scratchSection').style.display = 'block';
+    initScratchCard();
+  }, 2000);
+}
+
+function initScratchCard() {
+  const canvas = document.getElementById('scratchCanvas');
+  const ctx = canvas.getContext('2d');
+  const prizeLayer = document.getElementById('prizeLayer');
+  const prize = determinePrize();
+  prizeLayer.innerHTML = prize.text;
+  drawScratchLayer(ctx);
+  addScratchFunctionality(canvas, ctx, prize);
+}
+
+function determinePrize() {
+  let isWinner = prizePositions.includes(entryNumber);
+  if (isWinner) {
+    const prizeIndex = prizePositions.indexOf(entryNumber);
+    if (prizeIndex % 2 === 0) {
+      return { text: ' WINNER! <br/>$50 Voucher<br/>(Mecca or Uber Eats)', isWinner: true, type: 'voucher', voucherType: 'Mecca or Uber Eats' };
+    } else {
+      return { text: ' WINNER! <br/>20% Campaign<br/>Discount + Free BLS', isWinner: true, type: 'discount' };
+    }
+  } else {
+    return { text: 'Better Luck<br/>Next Time!<br/>', isWinner: false };
+  }
+}
+
+function drawScratchLayer(ctx) {
+  const gradient = ctx.createLinearGradient(0, 0, 300, 200);
+  gradient.addColorStop(0, '#c0c0c0');
+  gradient.addColorStop(0.5, '#d0d0d0');
+  gradient.addColorStop(1, '#a0a0a0');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 300, 200);
+  ctx.fillStyle = '#b8b8b8';
+  for (let i = 0; i < 150; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random() * 300, Math.random() * 200, Math.random() * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = '#666';
+  ctx.font = 'bold 28px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('SCRATCH', 150, 85);
+  ctx.fillText('TO WIN', 150, 125);
+}
+
+function addScratchFunctionality(canvas, ctx, prize) {
+  let isScratching = false;
+  let hasRevealed = false;
+  const totalPixels = canvas.width * canvas.height;
+
+  function getEventPos(e, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    return { x: (clientX - rect.left) * (canvas.width / rect.width), y: (clientY - rect.top) * (canvas.height / rect.height) };
+  }
+
+  function calculateScratchPercentage() {
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
+    let transparentPixels = 0;
+    for (let i = 3; i < pixels.length; i += 4) {
+      if (pixels[i] === 0) transparentPixels++;
+    }
+    return transparentPixels / totalPixels;
+  }
+
+  function updateProgress() {
+    if (hasRevealed) return;
+    const scratchPercentage = calculateScratchPercentage();
+    const percentageText = Math.round(scratchPercentage * 100);
+    document.getElementById('percentageDisplay').textContent = `${percentageText}% scratched`;
+    if (scratchPercentage >= 0.50) {
+      hasRevealed = true;
+      currentUser.hasScratched = true;
+      currentUser.prize = prize;
+      localStorage.setItem('scratchGameResult', JSON.stringify({ user: currentUser, entryNumber, prize, timestamp: new Date().toISOString() }));
+      canvas.style.transition = 'opacity 0.5s ease';
+      canvas.style.opacity = '0';
+      setTimeout(() => { showResult(prize); }, 500);
+    }
+  }
+
+  function scratch(e) {
+    if (!isScratching || hasRevealed) return;
+    const pos = getEventPos(e, canvas);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 35, 0, Math.PI * 2);
+    ctx.fill();
+    updateProgress();
+  }
+
+  canvas.addEventListener('mousedown', (e) => { isScratching = true; scratch(e); });
+  canvas.addEventListener('mousemove', scratch);
+  canvas.addEventListener('mouseup', () => { isScratching = false; });
+  canvas.addEventListener('mouseleave', () => { isScratching = false; });
+  canvas.addEventListener('touchstart', (e) => { e.preventDefault(); isScratching = true; scratch(e); });
+  canvas.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); });
+  canvas.addEventListener('touchend', (e) => { e.preventDefault(); isScratching = false; });
+}
+
+function showResult(prize) {
+  document.getElementById('scratchSection').style.display = 'none';
+  document.getElementById('resultSection').style.display = 'block';
+  const resultTitle = document.getElementById('resultTitle');
+  const resultMessage = document.getElementById('resultMessage');
+  if (prize.isWinner) {
+    resultTitle.textContent = 'Congratulations!';
+    resultTitle.className = 'winner';
+    if (prize.type === 'voucher') {
+      resultMessage.innerHTML = `
+        <h3>You won a $50 ${prize.voucherType} Voucher!</h3>
+        <p>Screenshot this page as proof of your win!</p>
+      `;
+    } else {
+      resultMessage.innerHTML = `
+        <h3>You won 20% OFF your next campaign + Free BLS!*</h3>
+        <p><small>*Campaign must be $65,000+ • BLS requires 6-week runtime & 20,000 minimum article views</small></p>
+        <p>Screenshot this page as proof of your win!</p>
+      `;
+    }
+  } else {
+    resultTitle.textContent = 'Thanks for Playing!';
+    resultTitle.className = 'loser';
+    resultMessage.innerHTML = `<p>Better luck next time!</p>`;
+  }
+}
+</script>
 </body>
 </html>
