@@ -18,8 +18,7 @@
             position: relative;
             overflow-x: hidden;
         }
-        
-        /* Background icons */
+
         .bg-icons {
             position: absolute;
             width: 100%;
@@ -27,13 +26,13 @@
             opacity: 0.1;
             z-index: 0;
         }
-        
+
         .bg-icon {
             position: absolute;
             font-size: 2rem;
             color: white;
         }
-        
+
         .container {
             position: relative;
             z-index: 1;
@@ -41,24 +40,24 @@
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 30px;
         }
-        
+
         .logo {
             display: inline-flex;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .logo h1 {
             color: #333;
             font-size: 2rem;
             margin-right: 10px;
         }
-        
+
         .logo .play-icon {
             width: 0;
             height: 0;
@@ -66,8 +65,7 @@
             border-top: 15px solid transparent;
             border-bottom: 15px solid transparent;
         }
-        
-        /* Typeform Embed Section */
+
         .typeform-section {
             background: white;
             border: 2px dashed #666;
@@ -78,8 +76,7 @@
             overflow: hidden;
             height: 600px;
         }
-        
-        /* Waiting Screen */
+
         .waiting-screen {
             background: white;
             border: 2px dashed #666;
@@ -88,12 +85,12 @@
             text-align: center;
             display: none;
         }
-        
+
         .waiting-screen h2 {
             color: #333;
             margin-bottom: 20px;
         }
-        
+
         .spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #333;
@@ -103,13 +100,12 @@
             animation: spin 2s linear infinite;
             margin: 20px auto;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Scratch Section */
+
         .scratch-section {
             background: white;
             border: 2px dashed #666;
@@ -118,7 +114,7 @@
             text-align: center;
             display: none;
         }
-        
+
         .scratch-card {
             position: relative;
             width: 300px;
@@ -129,11 +125,11 @@
             cursor: grab;
             border: 2px solid #ccc;
         }
-        
+
         .scratch-card:active {
             cursor: grabbing;
         }
-        
+
         .prize-layer {
             position: absolute;
             top: 0;
@@ -151,14 +147,14 @@
             text-align: center;
             padding: 20px;
         }
-        
+
         .scratch-canvas {
             position: absolute;
             top: 0;
             left: 0;
             z-index: 2;
         }
-        
+
         .result-section {
             background: white;
             border: 2px dashed #666;
@@ -168,15 +164,15 @@
             display: none;
             margin-top: 20px;
         }
-        
+
         .winner {
             color: #10b981;
         }
-        
+
         .loser {
             color: #ef4444;
         }
-        
+
         .rules-section {
             background: #000;
             color: white;
@@ -184,40 +180,40 @@
             text-align: center;
             margin-top: 30px;
         }
-        
+
         .rules-section h3 {
             font-size: 1.5rem;
             margin-bottom: 10px;
         }
-        
+
         .rules-link {
             color: #666;
             text-decoration: underline;
         }
-        
+
         .prizes-list {
             margin: 20px 0;
             line-height: 1.8;
             font-size: 0.9rem;
             color: #666;
         }
-        
+
         .scratch-progress {
             margin: 10px 0;
             font-size: 0.9rem;
             color: #666;
         }
-        
+
         @media (max-width: 600px) {
             .typeform-section {
                 height: 500px;
             }
-            
+
             .scratch-card {
                 width: 250px;
                 height: 160px;
             }
-            
+
             .scratch-section {
                 padding: 20px;
             }
@@ -225,7 +221,6 @@
     </style>
 </head>
 <body>
-    <!-- Background Icons -->
     <div class="bg-icons">
         <div class="bg-icon" style="top: 10%; left: 5%;">👤</div>
         <div class="bg-icon" style="top: 20%; right: 10%;">💎</div>
@@ -239,23 +234,19 @@
         <div class="bg-icon" style="top: 75%; right: 20%;">💬</div>
         <div class="bg-icon" style="bottom: 10%; left: 25%;">📋</div>
     </div>
-    
+
     <div class="container">
-        <!-- Header with Logo -->
         <div class="header">
             <div class="logo">
                 <h1>Avid</h1>
                 <div class="play-icon"></div>
             </div>
         </div>
-        
-        <!-- Typeform Embed Section -->
+
         <div class="typeform-section" id="typeformSection">
-            <!-- Special instructions can go here if needed -->
             <div style="background: #333; color: white; padding: 10px; text-align: center; font-weight: bold;">
                 Complete the survey below to unlock your Scratch & Win game!
             </div>
-            <!-- Typeform Embed -->
             <div data-tf-widget="XIsHQup2" 
                  data-tf-iframe-props="title=Avid Scratch & Win Entry"
                  data-tf-medium="snippet"
@@ -263,352 +254,65 @@
             </div>
             <script src="//embed.typeform.com/next/embed.js"></script>
         </div>
-        
-      <!-- Waiting Screen -->
-<div class="waiting-screen" id="waitingScreen">
-    <h2>Processing Your Entry...</h2>
-    <div class="spinner"></div>
-    <p>Get ready to scratch!</p>
-</div>
-  <!-- Waiting Screen -->
-      <div<!-- Waiting Screen -->
-<div class="waiting-screen" id="waitingScreen">
-    <h2>Processing Your Entry...</h2>
-    <div class="spinner"></div>
-    <p>Get ready to scratch!</p>
-</div>
- class="waiting-screen" id="waitingScreen">
-    <h2>Processing Your Entry...</h2>
-    <div class="spinner"></div>
-    <p>Get ready to scratch!</p>/div><div class="waiting-screen" id="waitingScreen"<div class="waiting-screen" id="waitingScreen"><iv class="waiting-screen" id="waitingScreen">  <diclass="waiting-scren"v clas50waiting-screen" id="waitingScreen">
+
+        <div class="waiting-screen" id="waitingScreen">
             <h2>Processing Your Entry...</h2>
             <div class="spinner"></div>
             <p>Get ready to scratch!</p>
         </div>
-        
-        <!-- Scratch Section -->
+
         <div class="scratch-section" id="scratchSection">
             <h2>Scratch to Find Out if You Won!</h2>
             <p>Use your mouse or finger to scratch off the silver area and discover your result</p>
-            
             <div class="prizes-list">
                 <p><strong>Possible Prizes:</strong></p>
                 <p>$50 Mecca or Uber Eats Voucher • 20% Campaign Discount + Free BLS!*</p>
             </div>
-            
             <div class="scratch-card">
                 <div class="prize-layer" id="prizeLayer">Loading your result...</div>
                 <canvas class="scratch-canvas" id="scratchCanvas" width="300" height="200"></canvas>
             </div>
-            
             <div class="scratch-progress" id="scratchProgress">Scratch off at least 50% to reveal your result</div>
             <div class="scratch-progress" id="percentageDisplay" style="font-weight: bold; color: #333;">0% scratched</div>
         </div>
-        
-        <!-- Result Section -->
+
         <div class="result-section" id="resultSection">
             <h2 id="resultTitle"></h2>
             <div id="resultMessage"></div>
         </div>
-        
-        <!-- Rules Section -->
+
         <div class="rules-section">
             <h3>OFFICIAL RULES</h3>
             <a href="#" class="rules-link">Terms and conditions apply</a>
         </div>
     </div>
-    
+
     <script>
-        // User data and game state
-        let currentUser = {};
-        let entryNumber = 0;
-        let formCompleted = false;
-        
-        // Prize positions - every 10th entry wins
-        const prizePositions = [];
-        for (let i = 10; i <= 1000; i += 10) {
-            prizePositions.push(i);
-        }
-        
-        // Listen for Typeform completion and auto-transition to scratch game
-        window.addEventListener('message', function(event) {
-            // Security check - make sure message is from Typeform
-            if (!event.origin.includes('typeform.com')) return;
-            
-            console.log('Received message:', event.data);
-            
-            // Typeform sends a form-submit event when completed
-            if (event.data && event.data.type === 'form-submit' && !formCompleted) {
-                formCompleted = true;
-                console.log('Typeform completed! Starting scratch game...');
-                
-                // Extract any available data
-                const responseId = event.data.responseId || Math.random().toString(36).substr(2, 9);
-                
-                // Since we can't get the actual form data from embedded Typeform,
-                // we'll use generic placeholders or you can prompt for info
-                currentUser = {
-                    firstName: 'Valued',
-                    lastName: 'Player',
-                    email: 'player@avidcollective.com',
-                    company: 'Agency Partner',
-                    responseId: responseId,
-                    timestamp: new Date().toISOString()
-                };
-                
-                // Auto-transition to scratch game
-                setTimeout(() => {
-                    startScratchGame();
-                }, 1000);
-            }
-        });
-        
-        function startScratchGame() {
-            console.log('Starting scratch game with user data:', currentUser);
-            
-            // Generate entry number
-            entryNumber = Math.floor(Math.random() * 1000) + 1;
-            
-            // Show waiting screen briefly
-            document.getElementById('typeformSection').style.display = 'none';
-            document.getElementById('waitingScreen').style.display = 'block';
-            
-            // After a short delay, show scratch section
-            setTimeout(() => {
-                document.getElementById('waitingScreen').style.display = 'none';
-                document.getElementById('scratchSection').style.display = 'block';
-                initScratchCard();
-            }, 2000);
-        }
-        
-        function initScratchCard() {
-            console.log('Initializing scratch card');
-            
-            const canvas = document.getElementById('scratchCanvas');
-            const ctx = canvas.getContext('2d');
-            const prizeLayer = document.getElementById('prizeLayer');
-            
-            // Determine prize
-            const prize = determinePrize();
-            console.log('Prize determined:', prize);
-            
-            prizeLayer.innerHTML = prize.text;
-            
-            // Draw scratch-off layer
-            drawScratchLayer(ctx);
-            
-            // Add scratching functionality
-            addScratchFunctionality(canvas, ctx, prize);
-        }
-        
         function determinePrize() {
-            // Check if this entry number is a winner
-            let isWinner = prizePositions.includes(entryNumber);
-            
+            let entryNumber = Math.floor(Math.random() * 1000) + 1;
+            let isWinner = entryNumber % 10 === 0;
             if (isWinner) {
-                const prizeIndex = prizePositions.indexOf(entryNumber);
-                if (prizeIndex % 2 === 0) {
-                    return {
-                        text: '🎉 WINNER! 🎉<br/>$50 Voucher<br/>(Mecca or Uber Eats)',
-                        isWinner: true,
-                        type: 'voucher',
-                        voucherType: 'Mecca or Uber Eats'
-                    };
+                if (entryNumber % 20 === 0) {
+                    return { text: '🎉 WINNER! 🎉<br/>$50 Voucher<br/>(Mecca or Uber Eats)', isWinner: true, type: 'voucher', voucherType: 'Mecca or Uber Eats' };
                 } else {
-                    return {
-                        text: '🎉 WINNER! 🎉<br/>20% Campaign<br/>Discount + Free BLS',
-                        isWinner: true,
-                        type: 'discount'
-                    };
+                    return { text: '🎉 WINNER! 🎉<br/>20% Campaign<br/>Discount + Free BLS', isWinner: true, type: 'discount' };
                 }
             } else {
-                return {
-                    text: 'Better Luck<br/>Next Time!<br/>🍀',
-                    isWinner: false,
-                    type: 'none'
-                };
+                return { text: 'Better Luck<br/>Next Time!<br/>🍀', isWinner: false, type: 'none' };
             }
         }
-        
-        function drawScratchLayer(ctx) {
-            // Create silver scratch-off effect
-            const gradient = ctx.createLinearGradient(0, 0, 300, 200);
-            gradient.addColorStop(0, '#c0c0c0');
-            gradient.addColorStop(0.5, '#d0d0d0');
-            gradient.addColorStop(1, '#a0a0a0');
-            
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 300, 200);
-            
-            // Add texture dots
-            ctx.fillStyle = '#b8b8b8';
-            for (let i = 0; i < 150; i++) {
-                ctx.beginPath();
-                ctx.arc(Math.random() * 300, Math.random() * 200, Math.random() * 3, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            
-            // Add scratch text
-            ctx.fillStyle = '#666';
-            ctx.font = 'bold 28px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('SCRATCH', 150, 85);
-            ctx.fillText('TO WIN', 150, 125);
-        }
-        
-        function addScratchFunctionality(canvas, ctx, prize) {
-            let isScratching = false;
-            let hasRevealed = false;
-            const totalPixels = canvas.width * canvas.height;
-            
-            function getEventPos(e, canvas) {
-                const rect = canvas.getBoundingClientRect();
-                const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-                const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-                
-                return {
-                    x: (clientX - rect.left) * (canvas.width / rect.width),
-                    y: (clientY - rect.top) * (canvas.height / rect.height)
-                };
-            }
-            
-            function calculateScratchPercentage() {
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const pixels = imageData.data;
-                let transparentPixels = 0;
-                
-                for (let i = 3; i < pixels.length; i += 4) {
-                    if (pixels[i] === 0) {
-                        transparentPixels++;
-                    }
-                }
-                
-                return transparentPixels / totalPixels;
-            }
-            
-            function updateProgress() {
-                if (hasRevealed) return;
-                
-                const scratchPercentage = calculateScratchPercentage();
-                const percentageText = Math.round(scratchPercentage * 100);
-                
-                document.getElementById('percentageDisplay').textContent = `${percentageText}% scratched`;
-                
-                if (scratchPercentage >= 0.50) {
-                    hasRevealed = true;
-                    
-                    // Store result locally (no webhook)
-                    currentUser.hasScratched = true;
-                    currentUser.prize = prize;
-                    
-                    // Save to localStorage as backup
-                    localStorage.setItem('scratchGameResult', JSON.stringify({
-                        user: currentUser,
-                        entryNumber: entryNumber,
-                        prize: prize,
-                        timestamp: new Date().toISOString()
-                    }));
-                    
-                    // Reveal prize
-                    canvas.style.transition = 'opacity 0.5s ease';
-                    canvas.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        showResult(prize);
-                    }, 500);
-                }
-            }
-            
-            function scratch(e) {
-                if (!isScratching || hasRevealed) return;
-                
-                const pos = getEventPos(e, canvas);
-                
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(pos.x, pos.y, 35, 0, Math.PI * 2);
-                ctx.fill();
-                
-                updateProgress();
-            }
-            
-            // Mouse events
-            canvas.addEventListener('mousedown', (e) => {
-                isScratching = true;
-                scratch(e);
-            });
-            
-            canvas.addEventListener('mousemove', scratch);
-            
-            canvas.addEventListener('mouseup', () => {
-                isScratching = false;
-            });
-            
-            canvas.addEventListener('mouseleave', () => {
-                isScratching = false;
-            });
-            
-            // Touch events
-            canvas.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                isScratching = true;
-                scratch(e);
-            });
-            
-            canvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                scratch(e);
-            });
-            
-            canvas.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                isScratching = false;
-            });
-        }
-        
+
         function showResult(prize) {
-            document.getElementById('scratchSection').style.display = 'none';
-            document.getElementById('resultSection').style.display = 'block';
-            
             const resultTitle = document.getElementById('resultTitle');
             const resultMessage = document.getElementById('resultMessage');
-            
-            if (prize.isWinner) {
+            if (prize.isWinner && prize.type === 'voucher') {
                 resultTitle.textContent = '🎉 Congratulations! 🎉';
-                resultTitle.className = 'winner';
-                
-                if (prize.type === 'voucher') {
-                    resultMessage.innerHTML = `
-                        <h3>You won a $50 ${prize.voucherType} Voucher!</h3>
-                        <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
-                        <p>Screenshot this page as proof of your win!</p>
-                        <p><strong>Entry #${entryNumber}</strong></p>
-                        <p style="margin-top: 20px; color: #666;">An Avid representative will contact you at ${currentUser.email} within 48 hours.</p>
-                    `;
-                } else {
-                    resultMessage.innerHTML = `
-                        <h3>You won 20% OFF your next campaign + Free BLS!*</h3>
-                        <p>Congratulations ${currentUser.firstName} ${currentUser.lastName} from ${currentUser.company}!</p>
-                        <p style="font-size: 12px; color: #666;">*Campaign must be $65,000+ • BLS requires 6-week runtime & 20,000 minimum article views</p>
-                        <p>Screenshot this page as proof of your win!</p>
-                        <p><strong>Entry #${entryNumber}</strong></p>
-                        <p style="margin-top: 20px; color: #666;">An Avid representative will contact you at ${currentUser.email} within 48 hours.</p>
-                    `;
-                }
-            } else {
-                resultTitle.textContent = 'Thanks for Playing!';
-                resultTitle.className = 'loser';
                 resultMessage.innerHTML = `
-                    <p>Thanks for playing, ${currentUser.firstName} from ${currentUser.company}!</p>
-                    <p>Better luck next time! 🍀</p>
-                    <p style="font-size: 12px; color: #666; margin-top: 20px;">Entry #${entryNumber}</p>
+                    <h3>You won a $50 ${prize.voucherType} Voucher!</h3>
+                    <p>Screenshot this page as proof of your win!</p>
                 `;
             }
         }
-        
-        console.log('✅ Typeform + Scratch & Win Integration Ready');
-        console.log('📋 Form completion triggers scratch game automatically');
-        console.log('🎮 No redirect needed - everything happens on this page');
     </script>
 </body>
 </html>
